@@ -197,7 +197,7 @@ export class Header extends Component {
 
           <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li className="dropdown-header">
-              <h6>Kevin Anderson</h6>
+              <h6>Santhosh Ambekar</h6>
               <span>Web Designer</span>
             </li>
             <li>
