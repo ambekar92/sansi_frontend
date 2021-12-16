@@ -14,9 +14,7 @@ export class Header extends Component {
         }else{
             //alert("flase --"+this.state.flag);           
             document.body.classList.remove('toggle-sidebar');
-        }
-
-        
+        }        
     }
 
     render() {       
@@ -216,7 +214,7 @@ export class Header extends Component {
               <hr className="dropdown-divider"/>
             </li>
 
-            <li>
+            {/* <li>
               <a className="dropdown-item d-flex align-items-center" href="users-profile.html">
                 <i className="bi bi-gear"></i>
                 <span>Account Settings</span>
@@ -234,10 +232,10 @@ export class Header extends Component {
             </li>
             <li>
               <hr className="dropdown-divider"/>
-            </li>
+            </li> */}
 
             <li>
-              <a className="dropdown-item d-flex align-items-center" href="/">
+              <a className="dropdown-item d-flex align-items-center" href="/login">
                 <i className="bi bi-box-arrow-right"></i>
                 <span>Sign Out</span>
               </a>

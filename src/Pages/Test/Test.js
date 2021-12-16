@@ -1,12 +1,20 @@
 import React, { Component } from 'react'  
-import Leftside from '../../Layout/Leftside';  
+import Layout from '../../Layout/Layout';  
 
 export class Test extends Component {  
+    
     render() {  
+
         return (  
-            <div>
-                <h1>TEST</h1>
-                <Leftside/>
+            <div>                
+                <Layout/>
+                <div id="content-wrapper" className="d-flex flex-column">  
+                        <div id="content">  
+                            <main id="main" class="main">
+                                <h1>SANTHOSH</h1>
+                            </main>
+                        </div>
+                </div>
             </div>
         )  
     }  

@@ -2,20 +2,28 @@
 import React from 'react'   
 import { Route, Routes } from 'react-router-dom';
 
-import Layout  from './Layout/Layout';
+// import Layout  from './Layout/Layout';
+import Page404 from './Pages/Medical/404Page';
+import Login from './Pages/Login/Login';
 import MedicalHome from './Pages/Medical/MedicalHome';
-import Test from './Pages/Test/Test';
+import Product from './Pages/Medical/Product';
 
+import Test from './Pages/Test/Test';
 
 function RouterNav() {
     return(
         <div className="App">  
-            <h1>Iam Router</h1>
+            {/* <Page404/> */}
+            {/* <Layout/> */}
             <Routes>
-                <Route path='/' element={<Layout />}></Route>
+                <Route path='*' element={<Page404 />}></Route>
+                <Route path='/' element={<MedicalHome />}></Route>
                 <Route path='/home' element={<MedicalHome />}></Route>
+                <Route path='/login' element={<Login />}></Route>
+                <Route path='/inventory' element={<Product />}></Route>
                 <Route path='/test' element={<Test />}></Route>
-            </Routes>      
+            </Routes>  
+            {/* <Footer/>     */}
         </div>
     );
 }

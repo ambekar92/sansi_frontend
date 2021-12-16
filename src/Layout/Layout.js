@@ -1,46 +1,37 @@
 import React, { Component } from 'react';  
 import Leftside from './Leftside';  
-import Header from './Header'  
-import Footer from './Footer'  
-import MedicalHome from '../Pages/Medical/MedicalHome'  
+import Header from './Header'   
+import ItemService from '../Service/commonService';
 //import { BrowserRouter, Route, Switch } from 'react-router-dom'; 
 
 export class Layout extends Component {  
+    constructor(props) {
+        super(props);  
+        this.itemService = new ItemService();
+        this.state={
+            menu:[]
+        }
+      }
+
+    componentDidMount() {
+        this.getMenuList();        
+    }
+
+    getMenuList() {        
+      this.itemService.getMenuList().then(items => {
+          //console.log("getMenuList >>",items);
+          this.setState({menu: items});
+      });
+    }
+
     loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>  
     render() {  
         return (  
             <div>  
                 <div id="wrapper">  
-                    <Leftside />
-
-                    <div id="content-wrapper" className="d-flex flex-column">  
-                        <div id="content">  
-                            <Header />  
-                            <MedicalHome />    
-                        </div>  
-                        <Footer />  
-                    </div>  
+                    <Leftside info={this.state.menu}/>
+                    <Header /> 
                 </div>  
-
-                    {/* <div id="wrapper">                        
-                        <h1>Test Mammals</h1>
-                        <Leftside />
-                        <div id="content-wrapper" className="d-flex flex-column">  
-                            <div id="content">  
-                                <Header />  
-                                <BrowserRouter>
-                                    <Switch>
-                                        <Route path="/home">
-                                            <Home />   
-                                        </Route>
-                                    </Switch>
-                                </BrowserRouter>
-                                
-                            </div>  
-                            <Footer />  
-                        </div>                       
-                    </div> */}
-                    
             </div>  
         )  
     }  

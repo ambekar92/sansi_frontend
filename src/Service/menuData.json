@@ -1,0 +1,52 @@
+{
+    "menu": [{
+      "id": 1, 
+      "name": "Dashboard",  
+      "icon": "bi bi-grid", 
+      "icon2": "bi bi-chevron-down ms-auto",
+      "data_bs_targetp":"#Dashboard-nav3",
+      "data_bs_target":"Dashboard-nav3",
+      "hrefLink":"/home",
+      "children":[]
+    },{ 
+      "id": 2, 
+      "name": "Inventory",  
+      "icon": "bi bi-menu-button-wide", 
+      "icon2": "bi bi-chevron-down ms-auto",
+      "data_bs_targetp":"#Inventory-test1",
+      "data_bs_target":"Inventory-test1",
+      "children":[{
+        "id": 1, 
+        "name": "Inventory Add/View",  
+        "icon": "bi bi-circle", 
+        "hrefLink":"/inventory"
+      }]
+    },{ 
+      "id":3, 
+      "name": "Branch",  
+      "icon": "bi bi-archive", 
+      "icon2": "bi bi-chevron-down ms-auto",
+      "data_bs_targetp":"#Branch-nav2",
+      "data_bs_target":"Branch-nav2",
+      "children":[{
+        "id": 1, 
+        "name": "Add/View Branch",  
+        "icon": "bi bi-circle", 
+        "hrefLink":"/Login"
+      }]
+    },{ 
+      "id":4, 
+      "name": "Empolyee Details",  
+      "icon": "bi bi-person-lines-fill", 
+      "icon2": "bi bi-chevron-down ms-auto",
+      "data_bs_targetp":"#Empolyee-nav2",
+      "data_bs_target":"Empolyee-nav2",
+      "children":[{
+        "id": 1, 
+        "name": "Add/View Empolyee",  
+        "icon": "bi bi-circle", 
+        "hrefLink":"/Login"
+      }]
+    }
+  ] 
+}

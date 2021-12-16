@@ -4,7 +4,14 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorker from './serviceWorker';
+
 // import 'bootstrap/dist/css/bootstrap.min.css';
+import 'jquery/dist/jquery.min.js';
+
+//Datatable Modules
+import "datatables.net-dt/js/dataTables.dataTables"
+import "datatables.net-dt/css/jquery.dataTables.min.css"
+
 
 ReactDOM.render(
   <React.StrictMode>
