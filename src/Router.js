@@ -6,7 +6,7 @@ import { Route, Routes } from 'react-router-dom';
 import Page404 from './Pages/Medical/404Page';
 import Login from './Pages/Login/Login';
 import MedicalHome from './Pages/Medical/MedicalHome';
-import Product from './Pages/Medical/Product';
+import Inventory from './Pages/Medical/Inventory';
 
 import Test from './Pages/Test/Test';
 
@@ -20,7 +20,7 @@ function RouterNav() {
                 <Route path='/' element={<MedicalHome />}></Route>
                 <Route path='/home' element={<MedicalHome />}></Route>
                 <Route path='/login' element={<Login />}></Route>
-                <Route path='/inventory' element={<Product />}></Route>
+                <Route path='/inventory' element={<Inventory />}></Route>
                 <Route path='/test' element={<Test />}></Route>
             </Routes>  
             {/* <Footer/>     */}

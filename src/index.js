@@ -12,6 +12,13 @@ import 'jquery/dist/jquery.min.js';
 import "datatables.net-dt/js/dataTables.dataTables"
 import "datatables.net-dt/css/jquery.dataTables.min.css"
 
+//React Primeng 
+import 'primeflex/primeflex.css';
+
+import 'primereact/resources/themes/lara-light-indigo/theme.css';    //theme
+import 'primereact/resources/primereact.min.css';                  //core css
+import 'primeicons/primeicons.css';                                  //icons
+ 
 
 ReactDOM.render(
   <React.StrictMode>

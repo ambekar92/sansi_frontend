@@ -47,8 +47,8 @@ class ItemService {
     
     
     // GET Method
-    async getMethod(url){
-        let api_url= this.config.BASE_URL + url;
+    async getAllUsers(){
+        let api_url= this.config.BASE_URL + 'api/getUsers';
         console.log("URL -->", api_url);
 
         return fetch(api_url,{

@@ -78,7 +78,7 @@ export class MedicalHome extends Component {
                                     
                                     <div className="col-lg-4">
                                         <div className="card info-card sales-card">
-                                            d
+                                          Test Card
                                         </div>
                                     </div>    
 
