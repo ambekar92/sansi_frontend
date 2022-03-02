@@ -1,5 +1,6 @@
 {
   "name": "sansi_admin",
+  "homepage": "https://sansi.santhoshambekar.in/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

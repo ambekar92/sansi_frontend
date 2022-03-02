@@ -77,12 +77,6 @@ export class Inventory extends Component {
         this.toast.show({ severity: 'info', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
     }
 
-    // handleCallback  = (data) => {
-    //     this.setState({ items: data });
-    //     //console.log("Product items >>",this.state);
-    // };
-
-    
     onChange(e) {
         this.setState({
             [e.target.name]: e.target.value
@@ -92,26 +86,26 @@ export class Inventory extends Component {
         e.preventDefault();
         this.confirm1();
     }
-    confirm1() {
-        confirmDialog({
-            message: 'Are you sure you want to proceed?',
-            header: 'Confirmation',
-            icon: 'pi pi-exclamation-triangle',
-            accept: this.accept,
-            reject: this.reject
-        });
-    }
-
-    // confirm2() {
+    // confirm1() {
     //     confirmDialog({
-    //         message: 'Do you want to delete this record?',
-    //         header: 'Delete Confirmation',
-    //         icon: 'pi pi-info-circle',
-    //         acceptClassName: 'p-button-danger',
+    //         message: 'Are you sure you want to proceed?',
+    //         header: 'Confirmation',
+    //         icon: 'pi pi-exclamation-triangle',
     //         accept: this.accept,
     //         reject: this.reject
     //     });
     // }
+
+    confirm1() {
+        confirmDialog({
+            message: 'Do you want to delete this record?',
+            header: 'Delete Confirmation',
+            icon: 'pi pi-info-circle',
+            acceptClassName: 'p-button-danger',
+            accept: this.accept,
+            reject: this.reject
+        });
+    }
 
     loadDataTable(){
        
