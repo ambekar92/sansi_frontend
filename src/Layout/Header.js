@@ -26,7 +26,7 @@ export class Header extends Component {
     <div className="d-flex align-items-center justify-content-between">
       <a href="index.html" className="logo d-flex align-items-center">
         <img src="assets/img/logo.png" alt=""/>
-        <span className="d-none d-lg-block">Sansi Admin</span>
+        <span className="d-none d-lg-block">SanSi</span>
       </a>
       <i className="bi bi-list toggle-sidebar-btn" onClick = {this.handleUpdate}></i>
     </div>
