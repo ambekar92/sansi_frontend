@@ -4,7 +4,7 @@ import { Button } from 'primereact/button';
 import { confirmDialog } from 'primereact/confirmdialog';
 import { Toast } from 'primereact/toast';
 import {MultiSelect} from 'primereact/multiselect';
-import ItemService from '../../Service/commonService';
+import ItemService from '../../services/commonService';
 import $ from 'jquery'; 
 import ReactDOM from 'react-dom';
 
@@ -38,6 +38,11 @@ export class Inventory extends Component {
            
             this.loadDataTable();
         });        
+
+        this.itemService.getAllUsers().then(items => {
+            console.log("Server getMenuList >>",items);
+        });        
+
     }
 
     // showSuccess() {

@@ -1,13 +1,12 @@
 import React, { Component } from 'react';  
 import Leftside from './Leftside';  
 import Header from './Header'   
-import ItemService from '../Service/commonService';
+import ItemService from "../services/commonService";
 //import { BrowserRouter, Route, Switch } from 'react-router-dom'; 
 
 export class Layout extends Component {  
     constructor(props) {
         super(props);  
-        this.itemService = new ItemService();
         this.state={
             menu:[]
         }
@@ -18,8 +17,7 @@ export class Layout extends Component {
     }
 
     getMenuList() {        
-      this.itemService.getMenuList().then(items => {
-          //console.log("getMenuList >>",items);
+        ItemService.getMenuList().then(items => {
           this.setState({menu: items});
       });
     }

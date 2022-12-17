@@ -1,0 +1,35 @@
+{
+  "menu": [
+    {
+      "id": 1,
+      "name": "Home",
+      "icon": "bi bi-grid",
+      "icon2": "bi bi-chevron-down ms-auto",
+      "data_bs_targetp": "#Dashboard-nav3",
+      "data_bs_target": "Dashboard-nav3",
+      "hrefLink": "/home",
+      "children": []
+    },
+    {
+      "id": 2,
+      "name": "Users",
+      "icon": "bi bi-person-plus-fill",
+      "icon2": "bi bi-chevron-down ms-auto",
+      "data_bs_targetp": "#AddUser-nav3",
+      "data_bs_target": "AddUser-nav3",
+      "hrefLink": "/add-user",
+      "children": []
+    },
+    {
+      "id": 3,
+      "name": "Codes",
+      "icon": "bi bi-gear-fill",
+      "icon2": "bi bi-chevron-down ms-auto",
+      "data_bs_targetp": "#Codes-nav3",
+      "data_bs_target": "Codes-nav3",
+      "hrefLink": "/add-code",
+      "children": []
+    }
+    
+  ]
+}

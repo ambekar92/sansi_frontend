@@ -1,29 +1,13 @@
 import React, { Component } from 'react'  
-// import { Link } from 'react-router-dom';  
-import ItemService from '../Service/commonService';
+// import ItemService from '../services/commonService';
 
 export class Leftside extends Component {  
     constructor(props) {
-      super(props);
-      this.itemService = new ItemService();      
-
+      super(props);    
       this.state = {        
         flag:false,
         addActiveClass:null
       };
-    }
-    
-    handleUpdate=(e)=> {       
-        this.setState({flag: true});
-
-        if(this.state.flag===true){
-            //alert("true --"+this.state.flag);           
-            //document.body.classList.add('toggle-sidebar');
-            this.setState({addActiveClass: "active"});
-        }else{
-            //alert("flase --"+this.state.flag);           
-            //document.body.classList.remove('toggle-sidebar');
-        }        
     }
 
     render() {  
@@ -31,7 +15,7 @@ export class Leftside extends Component {
       let menuItem= this.props.info;
       let saveState=this.state;
       let renderItems=null;
-
+      let selectedMenu = localStorage.getItem('menu');
       if (menuItem.length>0) {
             renderItems = menuItem.map(function(item, i) {  
               let Cardval;
@@ -59,13 +43,13 @@ export class Leftside extends Component {
               }else{
 
                 let specCase;
-                // if(item.name === "Dashboard"){
-                //   specCase ="nav-link";
-                // }else{
-                  specCase ="nav-link collapsed";
-                //}
+                if(item.name === selectedMenu){
+                  specCase ="nav-link";
+                }else{
+                  specCase ="nav-link collapsed dasdas";
+                }
                 Cardval = <li  key={item.name} className="nav-item">
-                            <a className={specCase} href={item.hrefLink}>
+                            <a className={specCase} href={item.hrefLink} >
                             <i className={item.icon}></i>
                               <span>{item.name}</span> 
                             </a>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'  
-import ItemService from '../../Service/commonService';
+import ItemService from '../../services/commonService';
 import $ from 'jquery'; 
 import ReactDOM from 'react-dom';
 import { Button } from 'primereact/button';
@@ -27,11 +27,16 @@ export class ViewProduct extends Component {
         console.log("ViewProduct props >>",this.props.sendData);
         // this.itemService.getAllUsers().then(items => {
         this.itemService.getMenuList().then(items => {
-            console.log("ViewProduct getMenuList >>",items);
+            console.log("ViewProduct getMenuList111 >>",items);
             this.setState({menu: items});
             this.props.parentCallback(this.state); 
             this.loadDataTable();
         });        
+
+        this.itemService.getAllUsers().then(items => {
+            console.log("Server getMenuList >>",items);
+        });        
+
     }
 
     loadDataTable(){
