@@ -56,6 +56,7 @@ const Login = () => {
       document.getElementById("alertMsg").classList.add("show");
       setTimeout(hideShowMsg, 3000);
     }
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -168,7 +169,7 @@ const Login = () => {
                     </div>
                   </div>
                   <div className="credits">
-                    Designed by <a href="/login">Sansii</a>
+                    Designed by <a href="/login">{headerName}</a>
                   </div>
                 </div>
               </div>

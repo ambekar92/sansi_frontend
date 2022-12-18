@@ -4,6 +4,7 @@ import ItemService from "../../services/commonService";
 
 const Home = () => {
     let [dashboardData, setDashboardData] = useState([]);
+    let [smsData, setSmsData] = useState([]);
 
     const dashboardDetails = () => {
         let obj = {};
@@ -14,14 +15,25 @@ const Home = () => {
             } else {
                 console.log(">> Not able get Dashboard Data");            
             }
-          });
+        });
+
+        ItemService.getSaveSMSData().then((items) => {
+            if (items.status !== false) {
+                setSmsData(items);
+            } else {
+                console.log(">> Not able get SMS Data");            
+            }
+        });
+        console.log(">> dashboardData", dashboardData);
+        console.log(">> smsData", smsData);
     }
 
     useEffect(() => {
         console.log(">> Home Running");
         localStorage.setItem('menu','Home')
         dashboardDetails();
-      }, []);
+        // eslint-disable-next-line
+    }, []);
 
     return (  
         <div>  

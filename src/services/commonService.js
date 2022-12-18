@@ -14,10 +14,12 @@ const func = {
     getUsersList,
     registerUser,
     userDelete,
-    dashboard_details
+    dashboard_details,
+    saveConfigData,
+    getSaveConfigData,
+    getSaveSMSData
 };
 
-// let userData = JSON.parse(localStorage.getItem('userData') | null) ;
 let localData = localStorage.getItem('userData');
 let userData={}
 if(localData){
@@ -166,22 +168,34 @@ async function registerUser(param) {
     let api_url= config.BASE_URL + 'api/register_user';
     return callPOST(api_url,param);
 }
-
 //GET
 async function getUsersList() {
-    let api_url= config.BASE_URL + 'api/getUsers';
+    let api_url= config.BASE_URL + 'api/getusers';
     return callGET(api_url);
 }
-
 //POST
 async function userDelete(param) {
-    let api_url= config.BASE_URL + 'api/deleteUser';
+    let api_url= config.BASE_URL + 'api/delete_user';
     return callPOST(api_url,param);
 }
-
 //POST
 async function dashboard_details(param) {
     let api_url= config.BASE_URL + 'api/dashboard_details';
     return callPOST(api_url,param);
 }
+//POST
+async function saveConfigData(param) {
+    let api_url= config.BASE_URL + 'api/save_configdata';
+    return callPOST(api_url,param);
+}
+//GET
+async function getSaveConfigData() {
+    let api_url= config.BASE_URL + 'api/getsave_configdata';
+    return callGET(api_url);
+}
 
+//GET
+async function getSaveSMSData() {
+    let api_url= config.BASE_URL + 'api/getsave_smsinfo';
+    return callGET(api_url);
+}

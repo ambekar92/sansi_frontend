@@ -10,7 +10,14 @@ const Header = () => {
   const getConfig=()=>{
     ItemService.getConfig().then(items => {
         setHeaderName(items.PRODUCT_NAME);                
-        setHeaderLogo(items.PRODUCT_LOGO);                
+        setHeaderLogo(items.PRODUCT_LOGO);     
+        saveConfigData(items);           
+    });         
+  }
+
+  const saveConfigData=(param)=>{
+    ItemService.saveConfigData(param).then(items => {
+       console.log(">> ConfigData Saved in DB");               
     });         
   }
 
@@ -33,7 +40,8 @@ const Header = () => {
   }
 
   useEffect(() => {
-    getConfig();
+    getConfig();  
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

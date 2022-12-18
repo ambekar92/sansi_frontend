@@ -1282,8 +1282,18 @@ h1, h2, h3, h4, h5, h6 {
 .dataTables_wrapper{
   overflow-x: auto;
   overflow-y: hidden;
+  margin-top: 10px;
 }
 
 .p-toast-top-right{
   top: 100px !important;
+}
+
+.accordion-header{
+  margin-left: 18px;
+  margin-right: 18px;
+}
+.buildDetails{
+  font-size: 10px;
+  display: block;
 }

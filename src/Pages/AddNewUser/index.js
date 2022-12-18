@@ -13,6 +13,9 @@ const AddUser = () => {
   let [mobile, setMobile] = useState('');
   let [role, setRole] = useState("USER");
   let [city, setCity] = useState('');
+  let [senderMobile, setSenderMobile] = useState('');
+  let [buildId, setBuildId] = useState('');
+
   let [rowData, setRowData] = useState([]);
   let [updateBtn, setUpdateBtn] = useState(false);
   let toast = useRef();
@@ -24,6 +27,9 @@ const AddUser = () => {
     setEmail("");
     setMobile("");
     setCity("");
+    setSenderMobile("");
+    setBuildId("");
+
     setUpdateBtn(false);
   };
 
@@ -36,9 +42,11 @@ const AddUser = () => {
       mobile,
       role,
       city,
+      senderMobile,
+      buildId
     };
     // console.log(">> handleSubmit", obj);
-    if (name !== '' && password !== '' && email !== '' && mobile !== '' && city !== '') {
+    if (name !== '' && password !== '' && email !== '' && mobile !== '' && city !== '' && senderMobile !== '' & buildId !== '') {
         ItemService.registerUser(obj).then((items) => {
             // console.log(">> Add User ", items);
             if (items.status === false) {
@@ -64,10 +72,12 @@ const AddUser = () => {
       mobile,
       role,
       city,
+      buildId,
+      senderMobile,
       "_id":rowData._id
     };
     // console.log(">> handleUpdate", obj);
-    if (name !== '' && password !== '' && email !== '' && mobile !== '' && city !== '') {
+    if (name !== '' && password !== '' && email !== '' && mobile !== '' && city !== '' && senderMobile !== '' & buildId !== '') {
         ItemService.registerUser(obj).then((items) => {
             // console.log(">> Update User ", items);
             if (items.status === false) {
@@ -102,14 +112,18 @@ const AddUser = () => {
   };
 
   const handleEdit = (rowData) => {
+    document.getElementById('flush-collapseOne').classList.add('show');
+    document.getElementById('addUser').classList.remove('collapsed');
     setName(rowData.name);
     setPassword(rowData.password);
     setEmail(rowData.email);
     setMobile(rowData.mobile);
     setCity(rowData.city);
     setRole(rowData.role);
-    setRowData(rowData);
-    
+    setSenderMobile(rowData.senderMobile);
+    setBuildId(rowData.buildId);
+
+    setRowData(rowData);    
     setUpdateBtn(true);
   }
 
@@ -129,8 +143,8 @@ const AddUser = () => {
     });
   };
 
-  const getLoadTable = (userData) => {
-    if (userData?.length === 0) {
+  const getLoadTable = (userTableData) => {
+    if (userTableData?.length === 0) {
       $("#example")
         .DataTable({
           paging: true,
@@ -150,7 +164,7 @@ const AddUser = () => {
         info: true,
         autoWidth: false,
         destroy: true,
-        data: userData,
+        data: userTableData,
         columns: [
           { data: null, SlNo: true, className: "text-center" },
           { data: "name" },
@@ -177,12 +191,34 @@ const AddUser = () => {
                 }
             },
           },
+          { data: "buildId", className: "text-right",
+            render: function (data, type, row, meta) {
+                if (row.buildId === "ADMIN") {
+                    return '-';
+                }else if(typeof row.buildId === 'undefined'){
+                  return '-';
+                } else {
+                    return '<span class="badge bg-info text-dark">'+row.buildId+'</span>';
+                }
+            },
+          },
+          { data: "senderMobile", className: "text-right",
+            render: function (data, type, row, meta) {
+                if (row.senderMobile === "ADMIN") {
+                    return '-';
+                } else if(typeof row.buildId === 'undefined'){
+                  return '-';
+                } else {
+                    return '<span class="badge border-primary border-1 text-primary">'+row.senderMobile+'</span>';
+                }
+            },
+          },
           { data: "city" },
           { data: "_id" },
         ],
         columnDefs: [
           {
-            targets: [7],
+            targets: [9],
             createdCell: (td, cellData, rowData, row, col) => {
               let a = (
                 <button
@@ -263,178 +299,259 @@ const AddUser = () => {
             <section className="section">
               <div className="row">
                 <div className="col-lg-12">
-                  <div className="card">
-                    <div className="card-body">
-                      <h5 className="card-title">Add Users</h5>
 
-                      <form>
-                        <div className="row mb-3">
-                          <div className="col-sm-4">
-                            <label
-                              htmlFor="inputText"
-                              className="col-sm-12 col-form-label"
+              <div className="accordion accordion-flush" id="accordionFlushExample">
+                <div className="accordion-item">
+                  <h2 className="accordion-header" id="flush-headingOne">
+                    <button id="addUser" className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        Add Users
+                    </button>
+                  </h2>
+                  <div id="flush-collapseOne" className="accordion-collapse collapse show" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                    <div className="accordion-body">
+                      
+                          <div className="card">
+                          <div className="card-body">
+                            {/* <h5 className="card-title">Add Users</h5> */}
+
+                            <form>
+                              {/* Row 1 */}
+                              <div className="row mb-3">
+                                <div className="col-sm-4">
+                                  <label
+                                    htmlFor="inputText"
+                                    className="col-sm-12 col-form-label"
+                                  >
+                                    User Name
+                                  </label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="name"
+                                    value={name || ""}
+                                    onChange={(e) => setName(e.target.value)}
+                                  />
+                                </div>
+
+                                <div className="col-sm-4">
+                                  <label
+                                    htmlFor="inputText"
+                                    className="col-sm-12 col-form-label"
+                                  >
+                                    Mobile Number
+                                  </label>
+                                  <input
+                                    type="number"
+                                    maxLength={10}
+                                    className="form-control"
+                                    name="mobile"
+                                    value={mobile || ""}
+                                    onChange={handleNumChange}
+                                  />
+                                </div>
+
+                                <div className="col-sm-4">
+                                  <label
+                                    htmlFor="inputText"
+                                    className="col-sm-12 col-form-label"
+                                  >
+                                    Role
+                                  </label>
+                                  <select
+                                    className="form-select"
+                                    id="floatingSelect"
+                                    aria-label="Floating label select example"
+                                    onChange={(e) => setRole(e.target.value)}
+                                    value={role || ""}
+                                  >
+                                    <option value="USER" defaultValue>USER</option>
+                                    <option value="ADMIN">ADMIN</option>
+                                  </select>
+                                </div>
+                              </div>
+
+                              {/* Row 2 */}
+                              <div className="row mb-3">
+                                <div className="col-sm-4">
+                                  <label
+                                    htmlFor="inputText"
+                                    className="col-sm-12 col-form-label"
+                                  >
+                                    Email ID
+                                  </label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="email"
+                                    value={email || ""}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                  />
+                                </div>
+
+                                <div className="col-sm-4">
+                                  <label
+                                    htmlFor="inputText"
+                                    className="col-sm-12 col-form-label"
+                                  >
+                                    Password
+                                  </label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="password"
+                                    value={password || ""}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                  />
+                                </div>
+
+                                <div className="col-sm-4">
+                                  <label
+                                    htmlFor="inputText"
+                                    className="col-sm-12 col-form-label"
+                                  >
+                                    City
+                                  </label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="city"
+                                    value={city || ""}
+                                    onChange={(e) => setCity(e.target.value)}
+                                  />
+                                </div>
+                              </div>
+
+                              {/* Row 3 */}
+                              <div className="row mb-3">
+                                <div className="col-sm-4">
+                                  <label
+                                    htmlFor="inputText"
+                                    className="col-sm-12 col-form-label"
+                                  >
+                                    Build ID                                     
+                                    <span className="buildDetails">
+                                      Build ID is available in Mobile Application 
+                                    </span>
+                                  </label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="buildId"
+                                    value={buildId || ""}
+                                    onChange={(e) => setBuildId(e.target.value)}
+                                  />
+                                </div>
+
+                                <div className="col-sm-4">
+                                  <label
+                                    htmlFor="inputText"
+                                    className="col-sm-12 col-form-label"
+                                  >
+                                    Sender Mobile Number (+91 ---)                                    
+                                    <span className="buildDetails">
+                                      From which Number User will Receive the Messages
+                                    </span>
+                                  </label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="senderMobile"
+                                    value={senderMobile || ""}
+                                    onChange={(e) => setSenderMobile(e.target.value)}
+                                  />
+                                </div>
+
+                              </div>
+
+
+                              <div className="row mb-3">
+                                <div className="col-sm-10">
+                                  {!updateBtn && 
+                                      <button
+                                      className="btn btn-primary"
+                                      onClick={handleSubmit}
+                                      >
+                                      <i className="bi bi-person-plus-fill"></i> Add User
+                                      </button>
+                                  }
+                                  {updateBtn && 
+                                      <button
+                                      className="btn btn-warning"
+                                      onClick={handleUpdate}
+                                      >
+                                      <i className="bi bi-person-plus-fill"></i> Update User
+                                      </button>
+                                  }
+                                      <button
+                                      className="btn btn-danger"
+                                      onClick={resetFrom}
+                                      >
+                                      <i className="bi bi-clean"></i> Clear
+                                      </button>
+
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                          </div>
+                      
+                      </div>
+                  </div>
+                </div>
+                <div className="accordion-item">
+                  <h2 className="accordion-header" id="flush-headingTwo">
+                    <button id="viewUser" className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                       View List of Users
+                    </button>
+                  </h2>
+                  <div id="flush-collapseTwo" className="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                    <div className="accordion-body">
+
+                          <div className="card">
+                          <div className="card-body">
+                           
+
+                            <table
+                              id="example"
+                              className="row-border order-column hover"
                             >
-                              User Name
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              name="name"
-                              value={name || ""}
-                              onChange={(e) => setName(e.target.value)}
-                            />
+                              <thead>
+                                <tr>
+                                  <th scope="col">Sl.No</th>
+                                  <th scope="col">Name</th>
+                                  <th scope="col">Mobile</th>
+                                  <th scope="col">Email</th>
+                                  <th scope="col">Password</th>
+                                  <th scope="col">Role</th>
+                                  <th scope="col">Build ID</th>
+                                  <th scope="col">Sender Mobile</th>
+                                  <th scope="col">City</th>
+                                  <th scope="col">Action</th>
+                                </tr>
+                              </thead>
+                            </table>
+                          </div>
                           </div>
 
-                          <div className="col-sm-4">
-                            <label
-                              htmlFor="inputText"
-                              className="col-sm-12 col-form-label"
-                            >
-                              Mobile Number
-                            </label>
-                            <input
-                              type="number"
-                              maxLength={10}
-                              className="form-control"
-                              name="mobile"
-                              value={mobile || ""}
-                              onChange={handleNumChange}
-                            />
-                          </div>
-
-                          <div className="col-sm-4">
-                            <label
-                              htmlFor="inputText"
-                              className="col-sm-12 col-form-label"
-                            >
-                              Role
-                            </label>
-                            <select
-                              className="form-select"
-                              id="floatingSelect"
-                              aria-label="Floating label select example"
-                              onChange={(e) => setRole(e.target.value)}
-                              value={role || ""}
-                            >
-                              <option value="USER" defaultValue>USER</option>
-                              <option value="ADMIN">ADMIN</option>
-                            </select>
-                          </div>
-                        </div>
-
-                        <div className="row mb-3">
-                          <div className="col-sm-4">
-                            <label
-                              htmlFor="inputText"
-                              className="col-sm-12 col-form-label"
-                            >
-                              Email ID
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              name="email"
-                              value={email || ""}
-                              onChange={(e) => setEmail(e.target.value)}
-                            />
-                          </div>
-
-                          <div className="col-sm-4">
-                            <label
-                              htmlFor="inputText"
-                              className="col-sm-12 col-form-label"
-                            >
-                              Password
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              name="password"
-                              value={password || ""}
-                              onChange={(e) => setPassword(e.target.value)}
-                            />
-                          </div>
-
-                          <div className="col-sm-4">
-                            <label
-                              htmlFor="inputText"
-                              className="col-sm-12 col-form-label"
-                            >
-                              City
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              name="city"
-                              value={city || ""}
-                              onChange={(e) => setCity(e.target.value)}
-                            />
-                          </div>
-                        </div>
-
-                        <div className="row mb-3">
-                          <div className="col-sm-10">
-                            {!updateBtn && 
-                                <button
-                                className="btn btn-primary"
-                                onClick={handleSubmit}
-                                >
-                                <i className="bi bi-person-plus-fill"></i> Add User
-                                </button>
-                            }
-                            {updateBtn && 
-                                <button
-                                className="btn btn-warning"
-                                onClick={handleUpdate}
-                                >
-                                <i className="bi bi-person-plus-fill"></i> Update User
-                                </button>
-                            }
-                                <button
-                                className="btn btn-danger"
-                                onClick={resetFrom}
-                                >
-                                <i className="bi bi-clean"></i> Clear
-                                </button>
-
-                          </div>
-                        </div>
-                      </form>
                     </div>
                   </div>
+                </div>
+               
+              </div>
+
+
+                  
                 </div>
               </div>
             </section>
 
-            <section className="section">
+            {/* <section className="section">
               <div className="row">
                 <div className="col-lg-12">
-                  <div className="card">
-                    <div className="card-body">
-                      <h5 className="card-title">List of Users</h5>
-
-                      <table
-                        id="example"
-                        className="row-border order-column hover"
-                      >
-                        <thead>
-                          <tr>
-                            <th scope="col">Sl.No</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Mobile</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Password</th>
-                            <th scope="col">Role</th>
-                            <th scope="col">City</th>
-                            <th scope="col">Action</th>
-                          </tr>
-                        </thead>
-                      </table>
-                    </div>
-                  </div>
+                  
                 </div>
               </div>
-            </section>
+            </section> */}
           </main>
         </div>
       </div>

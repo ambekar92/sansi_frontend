@@ -129,8 +129,8 @@ const AddUser = () => {
     });
   };
 
-  const getLoadTable = (userData) => {
-    if (userData?.length === 0) {
+  const getLoadTable = (userTableData) => {
+    if (userTableData?.length === 0) {
       $("#example")
         .DataTable({
           paging: true,
@@ -150,7 +150,7 @@ const AddUser = () => {
         info: true,
         autoWidth: false,
         destroy: true,
-        data: userData,
+        data: userTableData,
         columns: [
           { data: null, SlNo: true, className: "text-center" },
           { data: "name" },
