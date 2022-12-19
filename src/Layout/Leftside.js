@@ -6,21 +6,27 @@ export class Leftside extends Component {
       super(props);    
       this.state = {        
         flag:false,
-        addActiveClass:null
-      };
+        addActiveClass:null,
+        userData: JSON.parse(localStorage.getItem('userData')) // User Details from LocalStorage
+      };      
     }
 
-    render() {  
+   
 
+    render() {  
       let menuItem= this.props.info;
       let saveState=this.state;
+      let userData = this.state.userData;
+      
       let renderItems=null;
       let selectedMenu = localStorage.getItem('menu');
       if (menuItem.length>0) {
+            // console.log(">> menuItem",menuItem);
+            // eslint-disable-next-line
             renderItems = menuItem.map(function(item, i) {  
               let Cardval;
-
-              if (item.children.length>0) {                
+              
+              if (item.children.length>0) {  // Render Child Menu here              
                 let childItem = item.children.map(function(child_item, i) {
                     let child = <li key={child_item.name}>
                                   <a href={child_item.hrefLink} className={saveState.addActiveClass}>
@@ -40,22 +46,25 @@ export class Leftside extends Component {
                           </li> 
                                 
                 return Cardval;
-              }else{
+              }else{ // Render Parent Menu Here
 
-                let specCase;
-                if(item.name === selectedMenu){
-                  specCase ="nav-link";
-                }else{
-                  specCase ="nav-link collapsed dasdas";
+                if(item.roleInfo.includes(userData.data.role)){
+                  let specCase;
+                  if(item.name === selectedMenu){
+                    specCase ="nav-link";
+                  }else{
+                    specCase ="nav-link collapsed dasdas";
+                  }
+                  Cardval = <li  key={item.name} className="nav-item">
+                              <a className={specCase} href={item.hrefLink} >
+                              <i className={item.icon}></i>
+                                <span>{item.name}</span> 
+                              </a>
+                            </li>
+
+                  return Cardval;
                 }
-                Cardval = <li  key={item.name} className="nav-item">
-                            <a className={specCase} href={item.hrefLink} >
-                            <i className={item.icon}></i>
-                              <span>{item.name}</span> 
-                            </a>
-                          </li>
-
-                return Cardval;
+                
               }
                
                         

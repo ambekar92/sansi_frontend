@@ -3,7 +3,7 @@ import ItemService from "../services/commonService";
 
 const Header = () => {
   let [flag, setFlag] = useState(true);
-  let [userData] = useState(JSON.parse(localStorage.getItem('userData')));
+  let [userData] = useState(JSON.parse(localStorage.getItem('userData'))); // User Details from LocalStorage
   let [headerName, setHeaderName] = useState();
   let [headerLogo, setHeaderLogo] = useState();  
 
@@ -17,7 +17,7 @@ const Header = () => {
 
   const saveConfigData=(param)=>{
     ItemService.saveConfigData(param).then(items => {
-       console.log(">> ConfigData Saved in DB");               
+       console.log(">> Config Data Saved in DB");               
     });         
   }
 
@@ -37,6 +37,10 @@ const Header = () => {
         window.location="/login";
       }      
     });  
+  }
+
+  const handleReload=()=>{
+    window.location.reload()
   }
 
   useEffect(() => {
@@ -256,6 +260,12 @@ const Header = () => {
               </ul>
             </li> */}
 
+            <li className="nav-item dropdown">     
+              <span className="nav-link nav-icon">          
+                <i className="bi bi-arrow-repeat" onClick={handleReload}></i>   
+              </span>           
+            </li>
+
             <li className="nav-item dropdown pe-3">
               <a
                 className="nav-link nav-profile d-flex align-items-center pe-0"
@@ -275,13 +285,16 @@ const Header = () => {
               <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                 <li className="dropdown-header">
                   <h6> {userData.data.name}</h6>
-                  <span>{userData.data.email}</span>
+                  <span><b>{userData.data.email}</b></span><br/>
+                  <span>Role: <b>{userData.data.role}</b></span><br/>
+                  <span>Mobile Num: <b>{userData.data.mobile}</b></span><br/>
+                  <span>Sender Num: <b>{userData.data.senderMobile}</b></span><br/>
                 </li>
                 <li>
                   <hr className="dropdown-divider" />
                 </li>
 
-                <li>
+                {/* <li>
                   <a
                     className="dropdown-item d-flex align-items-center"
                     href="users-profile.html"
@@ -289,7 +302,7 @@ const Header = () => {
                     <i className="bi bi-person"></i>
                     <span>My Profile</span>
                   </a>
-                </li>
+                </li> */}
                 <li>
                   <hr className="dropdown-divider" />
                 </li>

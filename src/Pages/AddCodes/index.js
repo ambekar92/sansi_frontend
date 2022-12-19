@@ -6,13 +6,11 @@ import { Toast } from "primereact/toast";
 
 import ItemService from "../../services/commonService";
 
-const AddUser = () => {
+const AddCodes = () => {
+  let [userData] = useState(JSON.parse(localStorage.getItem('userData'))); // User Details from LocalStorage
   let [name, setName] = useState('');
-  let [password, setPassword] = useState('');
-  let [email, setEmail] = useState('');
-  let [mobile, setMobile] = useState('');
-  let [role, setRole] = useState("USER");
-  let [city, setCity] = useState('');
+  let [code, setCode] = useState('');
+
   let [rowData, setRowData] = useState([]);
   let [updateBtn, setUpdateBtn] = useState(false);
   let toast = useRef();
@@ -20,10 +18,8 @@ const AddUser = () => {
   const resetFrom = (e) => {
     e.preventDefault();
     setName("");
-    setPassword("");
-    setEmail("");
-    setMobile("");
-    setCity("");
+    setCode("");
+
     setUpdateBtn(false);
   };
 
@@ -31,15 +27,13 @@ const AddUser = () => {
     e.preventDefault();
     let obj = {
       name,
-      password,
-      email,
-      mobile,
-      role,
-      city,
+      code,
+      'updatedBy':userData.data.email,
+      'updatedOn':Date()
     };
     // console.log(">> handleSubmit", obj);
-    if (name !== '' && password !== '' && email !== '' && mobile !== '' && city !== '') {
-        ItemService.registerUser(obj).then((items) => {
+    if (name !== '' && code !== '') {
+        ItemService.saveCode(obj).then((items) => {
             // console.log(">> Add User ", items);
             if (items.status === false) {
               toastMsg("error", "Info", items.message);
@@ -59,16 +53,14 @@ const AddUser = () => {
     e.preventDefault();
     let obj = {
       name,
-      password,
-      email,
-      mobile,
-      role,
-      city,
-      "_id":rowData._id
+      code,
+      "_id":rowData._id,
+      'modifiedBy':userData.data.code,
+      'modifiedOn':Date()
     };
     // console.log(">> handleUpdate", obj);
-    if (name !== '' && password !== '' && email !== '' && mobile !== '' && city !== '') {
-        ItemService.registerUser(obj).then((items) => {
+    if (name !== '' && code !== '') {
+        ItemService.saveCode(obj).then((items) => {
             // console.log(">> Update User ", items);
             if (items.status === false) {
               toastMsg("error", "Info", items.message);
@@ -88,35 +80,29 @@ const AddUser = () => {
   const handleDelete = (id) => {
     let obj = {
       id,
+      'key':'code'
     };
     // console.log(">> handleDelete", obj);
-    ItemService.userDelete(obj).then((items) => {
-      // console.log(">> User Delete ", items);
+    ItemService.deleteRecord(obj).then((items) => {
+      // console.log(">> Record Delete ", items);
       if (items.status === false) {
         toastMsg("error", "Info", items.message);
       } else {
-        toastMsg("error", "Confirmed", "User Deleted successfully !!");
+        toastMsg("error", "Confirmed", "Record Deleted successfully !!");
         loadTable();
       }
     });
   };
 
   const handleEdit = (rowData) => {
+    document.getElementById('flush-collapseOne').classList.add('show');
+    document.getElementById('addUser').classList.remove('collapsed');
     setName(rowData.name);
-    setPassword(rowData.password);
-    setEmail(rowData.email);
-    setMobile(rowData.mobile);
-    setCity(rowData.city);
-    setRole(rowData.role);
-    setRowData(rowData);
-    
+    setCode(rowData.code);
+
+    setRowData(rowData);    
     setUpdateBtn(true);
   }
-
-  const handleNumChange = (event) => {
-    const limit = 10;
-    setMobile(event.target.value.slice(0, limit));
-  };
 
   const toastMsg = (a, b, c) => {
     // "success" , "error", "warn", "info"
@@ -154,35 +140,23 @@ const AddUser = () => {
         columns: [
           { data: null, SlNo: true, className: "text-center" },
           { data: "name" },
-          { data: "mobile" },
           {
-            data: "email",
+            data: "code",
             className: "text-right",
             render: function (data, type, row, meta) {
-              if (typeof row.email === "undefined") {
+              if (typeof row.code === "undefined") {
                 return "-";
               } else {
-                var a = row.email;
+                var a = row.code;
                 return a;
               }
             },
           },
-          { data: "password" },
-          { data: "role", className: "text-right",
-            render: function (data, type, row, meta) {
-                if (row.role === "ADMIN") {
-                    return '<span class="badge bg-primary">'+row.role+'</span>';
-                } else {
-                    return '<span class="badge bg-secondary">'+row.role+'</span>';
-                }
-            },
-          },
-          { data: "city" },
           { data: "_id" },
         ],
         columnDefs: [
           {
-            targets: [7],
+            targets: [3],
             createdCell: (td, cellData, rowData, row, col) => {
               let a = (
                 <button
@@ -230,7 +204,7 @@ const AddUser = () => {
   };
 
   const loadTable = () => {
-    ItemService.getUsersList().then((items) => {
+    ItemService.getSaveCode().then((items) => {
       getLoadTable(items.data);
     });
   };
@@ -250,7 +224,7 @@ const AddUser = () => {
         <div id="content">
           <main id="main" className="main">
             <div className="pagetitle">
-              <h1>Codes</h1>
+              <h1>SMS Codes</h1>
               <nav>
                 <ol className="breadcrumb">
                   <li className="breadcrumb-item">
@@ -263,178 +237,140 @@ const AddUser = () => {
             <section className="section">
               <div className="row">
                 <div className="col-lg-12">
-                  <div className="card">
-                    <div className="card-body">
-                      <h5 className="card-title">Add Code</h5>
 
-                      <form>
-                        <div className="row mb-3">
-                          <div className="col-sm-4">
-                            <label
-                              htmlFor="inputText"
-                              className="col-sm-12 col-form-label"
+              <div className="accordion accordion-flush" id="accordionFlushExample">
+                <div className="accordion-item">
+                  <h2 className="accordion-header" id="flush-headingOne">
+                    <button id="addUser" className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        Add Code
+                    </button>
+                  </h2>
+                  <div id="flush-collapseOne" className="accordion-collapse collapse show" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                    <div className="accordion-body">
+                      
+                          <div className="card">
+                          <div className="card-body">
+                            {/* <h5 className="card-title">Add Users</h5> */}
+
+                            <form>
+                              {/* Row 1 */}
+                              <div className="row mb-3">
+                                <div className="col-sm-4">
+                                  <label
+                                    htmlFor="inputText"
+                                    className="col-sm-12 col-form-label"
+                                  >
+                                    Code Name
+                                  </label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="name"
+                                    value={name || ""}
+                                    onChange={(e) => setName(e.target.value)}
+                                  />
+                                </div>
+
+                                <div className="col-sm-4">
+                                  <label
+                                    htmlFor="inputText"
+                                    className="col-sm-12 col-form-label"
+                                  >
+                                    Code
+                                  </label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="code"
+                                    value={code || ""}
+                                    onChange={(e) => setCode(e.target.value)}
+                                  />
+                                </div>
+                                
+                              </div>
+
+                              <div className="row mb-3">
+                                <div className="col-sm-10">
+                                  {!updateBtn && 
+                                      <button
+                                      className="btn btn-primary"
+                                      onClick={handleSubmit}
+                                      >
+                                      <i className="bi bi-person-plus-fill"></i> Add Code
+                                      </button>
+                                  }
+                                  {updateBtn && 
+                                      <button
+                                      className="btn btn-warning"
+                                      onClick={handleUpdate}
+                                      >
+                                      <i className="bi bi-person-plus-fill"></i> Update Code
+                                      </button>
+                                  }
+                                      <button
+                                      className="btn btn-danger"
+                                      onClick={resetFrom}
+                                      >
+                                      <i className="bi bi-clean"></i> Clear
+                                      </button>
+
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                          </div>
+                      
+                      </div>
+                  </div>
+                </div>
+                <div className="accordion-item">
+                  <h2 className="accordion-header" id="flush-headingTwo">
+                    <button id="viewUser" className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                       View List of Codes
+                    </button>
+                  </h2>
+                  <div id="flush-collapseTwo" className="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                    <div className="accordion-body">
+
+                          <div className="card">
+                          <div className="card-body">
+                           
+
+                            <table
+                              id="example"
+                              className="row-border order-column hover"
                             >
-                              User Name
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              name="name"
-                              value={name || ""}
-                              onChange={(e) => setName(e.target.value)}
-                            />
+                              <thead>
+                                <tr>
+                                  <th scope="col">Sl.No</th>
+                                  <th scope="col">Name</th>
+                                  <th scope="col">Code</th>
+                                  <th scope="col">Action</th>
+                                </tr>
+                              </thead>
+                            </table>
+                          </div>
                           </div>
 
-                          <div className="col-sm-4">
-                            <label
-                              htmlFor="inputText"
-                              className="col-sm-12 col-form-label"
-                            >
-                              Mobile Number
-                            </label>
-                            <input
-                              type="number"
-                              maxLength={10}
-                              className="form-control"
-                              name="mobile"
-                              value={mobile || ""}
-                              onChange={handleNumChange}
-                            />
-                          </div>
-
-                          <div className="col-sm-4">
-                            <label
-                              htmlFor="inputText"
-                              className="col-sm-12 col-form-label"
-                            >
-                              Role
-                            </label>
-                            <select
-                              className="form-select"
-                              id="floatingSelect"
-                              aria-label="Floating label select example"
-                              onChange={(e) => setRole(e.target.value)}
-                              value={role || ""}
-                            >
-                              <option value="USER" defaultValue>USER</option>
-                              <option value="ADMIN">ADMIN</option>
-                            </select>
-                          </div>
-                        </div>
-
-                        <div className="row mb-3">
-                          <div className="col-sm-4">
-                            <label
-                              htmlFor="inputText"
-                              className="col-sm-12 col-form-label"
-                            >
-                              Email ID
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              name="email"
-                              value={email || ""}
-                              onChange={(e) => setEmail(e.target.value)}
-                            />
-                          </div>
-
-                          <div className="col-sm-4">
-                            <label
-                              htmlFor="inputText"
-                              className="col-sm-12 col-form-label"
-                            >
-                              Password
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              name="password"
-                              value={password || ""}
-                              onChange={(e) => setPassword(e.target.value)}
-                            />
-                          </div>
-
-                          <div className="col-sm-4">
-                            <label
-                              htmlFor="inputText"
-                              className="col-sm-12 col-form-label"
-                            >
-                              City
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              name="city"
-                              value={city || ""}
-                              onChange={(e) => setCity(e.target.value)}
-                            />
-                          </div>
-                        </div>
-
-                        <div className="row mb-3">
-                          <div className="col-sm-10">
-                            {!updateBtn && 
-                                <button
-                                className="btn btn-primary"
-                                onClick={handleSubmit}
-                                >
-                                <i className="bi bi-person-plus-fill"></i> Add User
-                                </button>
-                            }
-                            {updateBtn && 
-                                <button
-                                className="btn btn-warning"
-                                onClick={handleUpdate}
-                                >
-                                <i className="bi bi-person-plus-fill"></i> Update User
-                                </button>
-                            }
-                                <button
-                                className="btn btn-danger"
-                                onClick={resetFrom}
-                                >
-                                <i className="bi bi-clean"></i> Clear
-                                </button>
-
-                          </div>
-                        </div>
-                      </form>
                     </div>
                   </div>
+                </div>
+               
+              </div>
+
+
+                  
                 </div>
               </div>
             </section>
 
-            <section className="section">
+            {/* <section className="section">
               <div className="row">
                 <div className="col-lg-12">
-                  <div className="card">
-                    <div className="card-body">
-                      <h5 className="card-title">List of Codes</h5>
-
-                      <table
-                        id="example"
-                        className="row-border order-column hover"
-                      >
-                        <thead>
-                          <tr>
-                            <th scope="col">Sl.No</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Mobile</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Password</th>
-                            <th scope="col">Role</th>
-                            <th scope="col">City</th>
-                            <th scope="col">Action</th>
-                          </tr>
-                        </thead>
-                      </table>
-                    </div>
-                  </div>
+                  
                 </div>
               </div>
-            </section>
+            </section> */}
           </main>
         </div>
       </div>
@@ -442,4 +378,4 @@ const AddUser = () => {
   );
 };
 
-export default AddUser;
+export default AddCodes;

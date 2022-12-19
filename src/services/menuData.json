@@ -8,6 +8,7 @@
       "data_bs_targetp": "#Dashboard-nav3",
       "data_bs_target": "Dashboard-nav3",
       "hrefLink": "/home",
+      "roleInfo":["ADMIN","USER"],
       "children": []
     },
     {
@@ -18,6 +19,7 @@
       "data_bs_targetp": "#AddUser-nav3",
       "data_bs_target": "AddUser-nav3",
       "hrefLink": "/add-user",
+      "roleInfo":["ADMIN"],
       "children": []
     },
     {
@@ -28,6 +30,7 @@
       "data_bs_targetp": "#Codes-nav3",
       "data_bs_target": "Codes-nav3",
       "hrefLink": "/add-code",
+      "roleInfo":["ADMIN"],
       "children": []
     }
     

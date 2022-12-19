@@ -1,33 +1,12 @@
 import menuData from './menuData.json'
 import config from './configuration.json'
 
-
-const func = {
-    getConfig,
-    getMenuList,
-    handleResponseError,
-    handleError,
-    callGET,
-    callPOST,
-    login,
-    logout,
-    getUsersList,
-    registerUser,
-    userDelete,
-    dashboard_details,
-    saveConfigData,
-    getSaveConfigData,
-    getSaveSMSData
-};
-
 let localData = localStorage.getItem('userData');
 let userData={}
 if(localData){
     userData = JSON.parse(localData);
     // console.log(">> Check ",userData);
 }
-
-export default func;
 
 /* Service Function starts here */
 
@@ -199,3 +178,43 @@ async function getSaveSMSData() {
     let api_url= config.BASE_URL + 'api/getsave_smsinfo';
     return callGET(api_url);
 }
+
+//POST
+async function saveCode(param) {
+    let api_url= config.BASE_URL + 'api/save_code';
+    return callPOST(api_url,param);
+}
+//GET
+async function getSaveCode() {
+    let api_url= config.BASE_URL + 'api/getsave_code';
+    return callGET(api_url);
+}
+//POST Common Delete function
+async function deleteRecord(param) {
+    let api_url= config.BASE_URL + 'api/delete_user';
+    return callPOST(api_url,param);
+}
+
+// eslint-disable-next-line
+const func = {
+    getConfig,
+    getMenuList,
+    handleResponseError,
+    handleError,
+    callGET,
+    callPOST,
+    login,
+    logout,
+    getUsersList,
+    registerUser,
+    userDelete,
+    dashboard_details,
+    saveConfigData,
+    getSaveConfigData,
+    getSaveSMSData,
+    saveCode,
+    getSaveCode,
+    deleteRecord
+};
+
+export default func;

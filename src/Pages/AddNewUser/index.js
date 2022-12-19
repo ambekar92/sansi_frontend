@@ -7,6 +7,7 @@ import { Toast } from "primereact/toast";
 import ItemService from "../../services/commonService";
 
 const AddUser = () => {
+  let [userData] = useState(JSON.parse(localStorage.getItem('userData'))); // User Details from LocalStorage
   let [name, setName] = useState('');
   let [password, setPassword] = useState('');
   let [email, setEmail] = useState('');
@@ -43,7 +44,9 @@ const AddUser = () => {
       role,
       city,
       senderMobile,
-      buildId
+      buildId,
+      'updatedBy':userData.data.email,
+      'updatedOn':Date()
     };
     // console.log(">> handleSubmit", obj);
     if (name !== '' && password !== '' && email !== '' && mobile !== '' && city !== '' && senderMobile !== '' & buildId !== '') {
@@ -74,7 +77,9 @@ const AddUser = () => {
       city,
       buildId,
       senderMobile,
-      "_id":rowData._id
+      "_id":rowData._id,
+      'modifiedBy':userData.data.email,
+      'modifiedOn':Date()
     };
     // console.log(">> handleUpdate", obj);
     if (name !== '' && password !== '' && email !== '' && mobile !== '' && city !== '' && senderMobile !== '' & buildId !== '') {
@@ -449,7 +454,7 @@ const AddUser = () => {
                                   >
                                     Sender Mobile Number (+91 ---)                                    
                                     <span className="buildDetails">
-                                      From which Number User will Receive the Messages
+                                      From which Number Device will Receive the Messages
                                     </span>
                                   </label>
                                   <input

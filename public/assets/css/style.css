@@ -1297,3 +1297,19 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 10px;
   display: block;
 }
+.p-toast{
+  width: 22rem !important;
+}
+.dropdown{
+  cursor: pointer;
+}
+
+@media screen and (max-width: 480px) {
+  .col-sm-11 {
+    width: 80%;
+  }
+  .col-sm-1 {
+    width: 20%;
+  }
+  
+}
