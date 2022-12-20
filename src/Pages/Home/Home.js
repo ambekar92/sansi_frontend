@@ -14,18 +14,25 @@ const Home = () => {
 
     const dashboardDetails = () => {
         let obj = {};
+
+        if(userData.data.role === 'ADMIN'){
+            obj={};
+        }else{
+            obj = {'buildId': userData.data.buildId}
+        }
+        
         // GET Dashboard Details
         ItemService.dashboard_details(obj).then((items) => {
-            if (items.status !== false) {
+            if (items?.status) {
                 setDashboardData(items);
             } else {
                 console.log(">> Not able get Dashboard Data");            
             }
         });
 
-        // Read SMS from DB
-        ItemService.getSaveSMSData().then(async (items) => {
-            if (items.status !== false) {
+        // Read Login user SMS from DB  // Func to get all the SMS getSaveSMSDataALL
+        ItemService.getUserSMSData(obj).then(async (items) => {
+            if (items?.status) {
                 setSmsData(items.data);
             } else {
                 console.log(">> Not able get SMS Data");            
@@ -34,7 +41,7 @@ const Home = () => {
 
         // GET Codes
         ItemService.getSaveCode().then((items) => {
-            if (items.status !== false) {
+            if (items?.status) {
                 setCodeData(items.data);
             } else {
                 console.log(">> Not able get Code Data");            
@@ -42,7 +49,6 @@ const Home = () => {
         });        
     }
 
-   
     const AdminListItem = ({value}) => {
         return (
             <li className="list-group-item d-flex justify-content-between align-items-start">
@@ -54,11 +60,22 @@ const Home = () => {
         );
     };
 
-
     const ListItem = ({value}) => {
         let [start, setStart] = useState(true);
         const handleStart=(code)=>{
-            console.log(">> handleStart Code",code);
+            // console.log(">> handleStart Code",code);
+            // send SMS
+            let obj={
+                "message" : code,
+                "number":userData.data.senderMobile,
+                "email":userData.data.email,
+                "mobile":userData.data.mobile,
+                "buildId":userData.data.buildId,
+            }
+            ItemService.sendSMS(obj).then((items) => {
+                console.log(">> SMS Sent",items);   
+            });
+
             setStart(false);
         }
         
@@ -134,7 +151,9 @@ const Home = () => {
                                                             <h5 className="card-title">Code Triggered / Total Codes</h5>
                                                             <div className="d-flex align-items-center">
                                                                 <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                                                <a href="/add-code"><i className="bi bi-pencil-square"></i></a>
+                                                                {userData.data.role === 'ADMIN' && <a href="/add-code"><i className="bi bi-pencil-square"></i></a>}
+                                                                {userData.data.role !== 'ADMIN' && <i className="bi bi-pencil-square"></i>}
+
                                                                 </div>
                                                                 <div className="ps-3">
                                                                 <h6>d145 / d200</h6>
@@ -166,12 +185,12 @@ const Home = () => {
                                             </div>
                                         </div>                                
                                     </div>
+                                    
                                 </section>
                             }
 
                             <section>
-                                <hr />
-                                <h3 className="pagetitle">List of Codes: </h3>
+                                <h5 className="pagetitle">List of Codes: </h5>
                                 <ol className="list-group list-group-numbered">
                                     {!admin && 
                                         codeData.length? codeData.map((value,index) => {
@@ -186,12 +205,17 @@ const Home = () => {
                                     })
                                     : null}
                                     
-                                    {admin && 
-                                    smsData.length? smsData.map((value,index) => {
-                                        let data = <><p><b>Address</b>: {value.address}<br/><b>BuildID</b>: {value.buildId}<br/><b>Body</b>: {value.body}</p>  </>   
-                                        return data; 
-                                    })
-                                    : null}
+                                    
+
+<ul>
+{smsData &&  
+    smsData.map((value,index) => {
+        // let data = <><p><b>Address</b>: {value.address}<br/><b>BuildID</b>: {value.buildId}<br/><b>Body</b>: {value.body}</p>  </> 
+        let data = <li key={index}><b>Address</b>: {value.address}<br/><b>BuildID</b>: {value.buildId}<br/><b>Body</b>: {value.body} <hr/></li>  
+        return data; 
+    })
+}
+</ul>
 
 
 

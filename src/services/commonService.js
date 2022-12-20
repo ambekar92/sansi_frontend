@@ -36,7 +36,7 @@ async function callGET(api_url) {
                 }
             }).then(response => {
                 if (!response.ok) {
-                    this.handleResponseError(response);
+                    handleResponseError(response);
                 }
                 return response.json();
             }).then(items => {
@@ -52,7 +52,7 @@ async function callGET(api_url) {
                     window.location="/login";
                 }            
             }).catch(error => {
-                this.handleError(error);
+                handleError(error);
             });
 }
 
@@ -67,7 +67,7 @@ async function callPOST(api_url,param) {
                 body:JSON.stringify(param)
             }).then(response => {
                 if (!response.ok) {
-                    this.handleResponseError(response);
+                    handleResponseError(response);
                 }
                 return response.json();
             }).then(items => {
@@ -85,7 +85,7 @@ async function callPOST(api_url,param) {
                 }     
                
             }).catch(error => {
-                this.handleError(error);
+                handleError(error);
             });
 }
 
@@ -101,7 +101,7 @@ async function login(param) {
                 body:JSON.stringify(param)
             }).then(response => {
                 if (!response.ok) {
-                    this.handleResponseError(response);
+                    handleResponseError(response);
                 }
                 return response.json();
             }).then(items => {
@@ -111,7 +111,7 @@ async function login(param) {
                 // sessionStorage.setItem('token',items.token); 
                 return items;
             }).catch(error => {
-                this.handleError(error);
+                handleError(error);
             });
 }
 
@@ -128,7 +128,7 @@ async function logout(param) {
         body:JSON.stringify(param)
     }).then(response => {
         if (!response.ok) {
-            this.handleResponseError(response);
+            handleResponseError(response);
         }
         return response.json();
     }).then(items => {
@@ -138,7 +138,7 @@ async function logout(param) {
         localStorage.setItem('info',''); 
         return items;
     }).catch(error => {
-        this.handleError(error);
+        handleError(error);
     });
 }
 
@@ -174,9 +174,15 @@ async function getSaveConfigData() {
 }
 
 //GET
-async function getSaveSMSData() {
+async function getSaveSMSDataALL() {
     let api_url= config.BASE_URL + 'api/getsave_smsinfo';
     return callGET(api_url);
+}
+
+//POST  // Get User releated SMS
+async function getUserSMSData(param) {
+    let api_url= config.BASE_URL + 'api/getuser_smsinfo';
+    return callPOST(api_url,param);
 }
 
 //POST
@@ -192,6 +198,12 @@ async function getSaveCode() {
 //POST Common Delete function
 async function deleteRecord(param) {
     let api_url= config.BASE_URL + 'api/delete_user';
+    return callPOST(api_url,param);
+}
+
+//POST // SEND SMS
+async function sendSMS(param) {
+    let api_url= config.BASE_URL + 'api/send_sms';
     return callPOST(api_url,param);
 }
 
@@ -211,10 +223,12 @@ const func = {
     dashboard_details,
     saveConfigData,
     getSaveConfigData,
-    getSaveSMSData,
+    getSaveSMSDataALL,
     saveCode,
     getSaveCode,
-    deleteRecord
+    deleteRecord,
+    getUserSMSData,
+    sendSMS
 };
 
 export default func;
