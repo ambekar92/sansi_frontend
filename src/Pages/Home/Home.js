@@ -5,7 +5,7 @@ import ItemService from "../../services/commonService";
 
 const Home = () => {
     let [dashboardData, setDashboardData] = useState([]);
-    // let [smsData, setSmsData] = useState([]);
+    let [smsData, setSmsData] = useState([]);
     let [codeData, setCodeData] = useState([]);
     let [showCard, setShowCard] = useState(false);
     let [admin, setAdmin] = useState(false);
@@ -24,13 +24,13 @@ const Home = () => {
         });
 
         // Read SMS from DB
-        // ItemService.getSaveSMSData().then(async (items) => {
-        //     if (items.status !== false) {
-        //         setSmsData(items.data);
-        //     } else {
-        //         console.log(">> Not able get SMS Data");            
-        //     }
-        // });
+        ItemService.getSaveSMSData().then(async (items) => {
+            if (items.status !== false) {
+                setSmsData(items.data);
+            } else {
+                console.log(">> Not able get SMS Data");            
+            }
+        });
 
         // GET Codes
         ItemService.getSaveCode().then((items) => {
@@ -185,6 +185,14 @@ const Home = () => {
                                         return <AdminListItem key={index} value={value} />        
                                     })
                                     : null}
+                                    
+                                    {admin && 
+                                    smsData.length? smsData.map((value,index) => {
+                                        let data = <><p><b>Address</b>: {value.address}<br/><b>BuildID</b>: {value.buildId}<br/><b>Body</b>: {value.body}</p>  </>   
+                                        return data; 
+                                    })
+                                    : null}
+
 
 
                                     {/* <li className="list-group-item d-flex justify-content-between align-items-start">
