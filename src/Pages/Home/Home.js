@@ -116,7 +116,7 @@ const Home = () => {
 
         const test=()=>{
             if(value==='off'){
-                document.getElementById(idVal).style.backgroundColor='green';
+                document.getElementById(idVal).style.backgroundColor='#00d500';
                 setValue('on'); 
             }else{
                 document.getElementById(idVal).style.backgroundColor='red';
