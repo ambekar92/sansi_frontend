@@ -1,6 +1,7 @@
 {
       "BASE_URL": "https://sansibackend-production.up.railway.app/",
       "PRODUCT_NAME":"SanSii",
+      "COMPANY_NAME":"Durga Power Controllers",
       "PRODUCT_LOGO": "assets/img/logo.png",
       "SMS_PATTERN":"##"
 }

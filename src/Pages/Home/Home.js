@@ -60,6 +60,7 @@ const Home = () => {
         );
     };
 
+    // If Code is added then this will be used 
     const ListItem = ({value}) => {
         let [start, setStart] = useState(true);
         const handleStart=(code)=>{
@@ -104,6 +105,67 @@ const Home = () => {
                 }
 
             </li>
+        );
+    };
+
+    const AddCodeButton = ({code_value}) => {
+
+        let [start, setStart] = useState(true);
+        let [value, setValue] = useState('off');
+        let idVal="mainDivToggle_"+code_value.code;
+
+        const test=()=>{
+            if(value==='off'){
+                document.getElementById(idVal).style.backgroundColor='green';
+                setValue('on'); 
+            }else{
+                document.getElementById(idVal).style.backgroundColor='red';
+                setValue('off'); 
+            }            
+            console.log(">> test>>",value);  
+        }
+
+        const handleStart=(code)=>{
+            // console.log(">> handleStart Code",code);
+            // send SMS
+            let obj={
+                "message" : code,
+                "number":userData.data.senderMobile,
+                "email":userData.data.email,
+                "mobile":userData.data.mobile,
+                "buildId":userData.data.buildId,
+            }
+            ItemService.sendSMS(obj).then((items) => {
+                console.log(">> SMS Sent",items);   
+            });
+
+            setStart(false);
+        }
+        
+        const handleStop=(code)=>{
+            console.log(">> handleStop Code",code);
+            setStart(true);
+        }
+        
+        return (
+            <>
+                <div className="mainCode">
+                    <div className="ms-2 me-auto">
+                        <div className="fw-bold">{code_value.code}</div>                        
+                    </div>
+                    <div className="mainDivToggle" id={idVal}>
+                        <input id="toggle" className="toggle" type="checkbox" role="switch" onClick={(e)=>test()} name="toggle" value={value} />
+                        <label  className="slot"> {/* htmlFor="toggle" */}
+                            <span className="slot__label">OOFF</span>
+                            <span className="slot__label">OON</span>
+                        </label>
+                    </div>
+                    
+                    <div className="codeDetails">
+                        <p>{code_value.name}</p>
+                    </div>
+                </div>
+            </>
         );
     };
 
@@ -183,63 +245,47 @@ const Home = () => {
                                                     </div>
                                                     }
                                             </div>
-                                        </div>                                
+                                        </div>   
+                                        
+                                    <hr/>                             
                                     </div>
-                                    
                                 </section>
                             }
 
                             <section>
-                                <h5 className="pagetitle">List of Codes: </h5>
-                                <ol className="list-group list-group-numbered">
+                                {/* <h5 className="pagetitle">List of Codes: </h5> */}
                                     {!admin && 
+                                        //<AddCodeButton />
                                         codeData.length? codeData.map((value,index) => {
-                                            return <ListItem key={index} value={value} />        
+                                            return <AddCodeButton key={index} code_value={value} />        
                                         })
                                     : null}
                                 
-                                     
+                                <ol className="list-group list-group-numbered">
+                                    {/* Show in the list */}
+                                    {/* {!admin && 
+                                        codeData.length? codeData.map((value,index) => {
+                                            return <ListItem key={index} value={value} />        
+                                        })
+                                    : null} */}
+
+                                    {/* Show in ON OFF Button */}
                                     {admin && 
                                     codeData.length? codeData.map((value,index) => {
                                         return <AdminListItem key={index} value={value} />        
                                     })
-                                    : null}
+                                    : null}                                  
                                     
-                                    
-
-<ul>
-{smsData &&  
-    smsData.map((value,index) => {
-        // let data = <><p><b>Address</b>: {value.address}<br/><b>BuildID</b>: {value.buildId}<br/><b>Body</b>: {value.body}</p>  </> 
-        let data = <li key={index}><b>Address</b>: {value.address}<br/><b>BuildID</b>: {value.buildId}<br/><b>Body</b>: {value.body} <hr/></li>  
-        return data; 
-    })
-}
-</ul>
-
-
-
-                                    {/* <li className="list-group-item d-flex justify-content-between align-items-start">
-                                    <div className="ms-2 me-auto">
-                                        <div className="fw-bold">Subheading</div>
-                                        Cras justo odio
-                                    </div>
-                                    <span className="badge bg-primary rounded-pill">14</span>
-                                    </li>
-                                    <li className="list-group-item d-flex justify-content-between align-items-start">
-                                    <div className="ms-2 me-auto">
-                                        <div className="fw-bold">Subheading</div>
-                                        Cras justo odio
-                                    </div>
-                                    <span className="badge bg-primary rounded-pill">14</span>
-                                    </li>
-                                    <li className="list-group-item d-flex justify-content-between align-items-start">
-                                    <div className="ms-2 me-auto">
-                                        <div className="fw-bold">Subheading</div>
-                                        Cras justo odio
-                                    </div>
-                                    <span className="badge bg-primary rounded-pill">14</span>
-                                    </li> */}
+                                    {/* List of Messages received from Mobile */}
+                                    <ul><br/>
+                                    {smsData &&  
+                                        smsData.map((value,index) => {
+                                            // let data = <><p><b>Address</b>: {value.address}<br/><b>BuildID</b>: {value.buildId}<br/><b>Body</b>: {value.body}</p>  </> 
+                                            let data = <li key={index}><b>Address</b>: {value.address}<br/><b>BuildID</b>: {value.buildId}<br/><b>Body</b>: {value.body} <hr/></li>  
+                                            return data; 
+                                        })
+                                    }
+                                    </ul>
                                 </ol>
                             </section>
                             

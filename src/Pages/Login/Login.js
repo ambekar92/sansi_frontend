@@ -6,12 +6,14 @@ const Login = () => {
   let [password, setPassword] = useState();
   let [headerName, setHeaderName] = useState();
   let [headerLogo, setHeaderLogo] = useState();
+  let [companyName, setCompanyName] = useState();
   let [info, setInfo] = useState();
 
   const getConfig = () => {
     ItemService.getConfig().then((items) => {
       setHeaderName(items.PRODUCT_NAME);
       setHeaderLogo(items.PRODUCT_LOGO);
+      setCompanyName(items.COMPANY_NAME);
     });
   };
 
@@ -67,15 +69,17 @@ const Login = () => {
             <div className="container">
               <div className="row justify-content-center">
                 <div className="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
-                  <div className="d-flex justify-content-center py-4">
+                  <div className="d-flex justify-content-center">
                     <a
                       href="index.html"
                       className="logo d-flex align-items-center w-auto"
                     >
                       <img src={headerLogo} alt="" />
-                      <span className="d-none d-lg-block">{headerName}</span>
-                    </a>
+                      <span className="d-lg-block">{headerName}</span>
+                    </a>                    
                   </div>
+                  
+                  <p className="loginCompany">" {companyName} "</p> 
 
                   <div className="card mb-3">
                     <div className="card-body">
@@ -84,7 +88,7 @@ const Login = () => {
                           Login to Your Account
                         </h5>
                         <p className="text-center small">
-                          Enter your username & password to login
+                          Enter your username & password
                         </p>
                       </div>
 
