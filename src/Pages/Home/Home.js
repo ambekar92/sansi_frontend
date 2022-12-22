@@ -61,56 +61,56 @@ const Home = () => {
     };
 
     // If Code is added then this will be used 
-    const ListItem = ({value}) => {
-        let [start, setStart] = useState(true);
-        const handleStart=(code)=>{
-            // console.log(">> handleStart Code",code);
-            // send SMS
-            let obj={
-                "message" : code,
-                "number":userData.data.senderMobile,
-                "email":userData.data.email,
-                "mobile":userData.data.mobile,
-                "buildId":userData.data.buildId,
-            }
-            ItemService.sendSMS(obj).then((items) => {
-                console.log(">> SMS Sent",items);   
-            });
+    // const ListItem = ({value}) => {
+    //     let [start, setStart] = useState(true);
+    //     const handleStart=(code)=>{
+    //         // console.log(">> handleStart Code",code);
+    //         // send SMS
+    //         let obj={
+    //             "message" : code,
+    //             "number":userData.data.senderMobile,
+    //             "email":userData.data.email,
+    //             "mobile":userData.data.mobile,
+    //             "buildId":userData.data.buildId,
+    //         }
+    //         ItemService.sendSMS(obj).then((items) => {
+    //             console.log(">> SMS Sent",items);   
+    //         });
 
-            setStart(false);
-        }
+    //         setStart(false);
+    //     }
         
-        const handleStop=(code)=>{
-            console.log(">> handleStop Code",code);
-            setStart(true);
-        }
+    //     const handleStop=(code)=>{
+    //         console.log(">> handleStop Code",code);
+    //         setStart(true);
+    //     }
         
-        return (
-            <li className="list-group-item d-flex justify-content-between align-items-start">
-                <div className="ms-2 me-auto">
-                    <div className="fw-bold">{value.code}</div>
-                        {value.name}
-                </div>
+    //     return (
+    //         <li className="list-group-item d-flex justify-content-between align-items-start">
+    //             <div className="ms-2 me-auto">
+    //                 <div className="fw-bold">{value.code}</div>
+    //                     {value.name}
+    //             </div>
                 
-                {start &&
-                    <button type="button" className="btn btn-dark rounded-pill btn-sm" onClick={(e)=>handleStart(value.code)}>
-                        Start <i className="bi bi-arrow-right-circle"></i>
-                    </button>                     
-                }
+    //             {start &&
+    //                 <button type="button" className="btn btn-dark rounded-pill btn-sm" onClick={(e)=>handleStart(value.code)}>
+    //                     Start <i className="bi bi-arrow-right-circle"></i>
+    //                 </button>                     
+    //             }
 
-                {!start &&
-                    <button type="button" className="btn btn-primary rounded-pill btn-sm" onClick={(e)=>handleStop(value.code)}>
-                        Stop <i className="bi bi-arrow-right-circle"></i>
-                    </button>                     
-                }
+    //             {!start &&
+    //                 <button type="button" className="btn btn-primary rounded-pill btn-sm" onClick={(e)=>handleStop(value.code)}>
+    //                     Stop <i className="bi bi-arrow-right-circle"></i>
+    //                 </button>                     
+    //             }
 
-            </li>
-        );
-    };
+    //         </li>
+    //     );
+    // };
 
     const AddCodeButton = ({code_value}) => {
 
-        let [start, setStart] = useState(true);
+        // let [start, setStart] = useState(true);
         let [value, setValue] = useState('off');
         let idVal="mainDivToggle_"+code_value.code;
 
@@ -125,27 +125,26 @@ const Home = () => {
             console.log(">> test>>",value);  
         }
 
-        const handleStart=(code)=>{
-            // console.log(">> handleStart Code",code);
-            // send SMS
-            let obj={
-                "message" : code,
-                "number":userData.data.senderMobile,
-                "email":userData.data.email,
-                "mobile":userData.data.mobile,
-                "buildId":userData.data.buildId,
-            }
-            ItemService.sendSMS(obj).then((items) => {
-                console.log(">> SMS Sent",items);   
-            });
-
-            setStart(false);
-        }
+        // const handleStart=(code)=>{
+        //     // console.log(">> handleStart Code",code);
+        //     // send SMS
+        //     let obj={
+        //         "message" : code,
+        //         "number":userData.data.senderMobile,
+        //         "email":userData.data.email,
+        //         "mobile":userData.data.mobile,
+        //         "buildId":userData.data.buildId,
+        //     }
+        //     ItemService.sendSMS(obj).then((items) => {
+        //         console.log(">> SMS Sent",items);   
+        //     });
+        //     setStart(false);
+        // }
         
-        const handleStop=(code)=>{
-            console.log(">> handleStop Code",code);
-            setStart(true);
-        }
+        // const handleStop=(code)=>{
+        //     console.log(">> handleStop Code",code);
+        //     setStart(true);
+        // }
         
         return (
             <>
