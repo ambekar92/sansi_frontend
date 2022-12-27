@@ -1,6 +1,9 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect,useState, useRef } from "react";
 import Layout from '../../Layout/Layout'; 
 import { InputSwitch } from 'primereact/inputswitch';
+import { confirmDialog } from 'primereact/confirmdialog';
+import { Toast } from "primereact/toast";
+import Moment from 'react-moment';
 import ItemService from "../../services/commonService";
 
 const Home = () => {
@@ -9,7 +12,9 @@ const Home = () => {
     let [codeData, setCodeData] = useState([]);
     let [showCard, setShowCard] = useState(false);
     let [admin, setAdmin] = useState(false);
-    
+    let [getSmsStatus, setSmsStatus] = useState();
+    let toast = useRef();
+        
     let [userData] = useState(JSON.parse(localStorage.getItem('userData'))); // User Details from LocalStorage
 
     const dashboardDetails = () => {
@@ -60,7 +65,7 @@ const Home = () => {
         );
     };
 
-    // If Code is added then this will be used 
+    /* If LIST Code is added then this will be used */ 
     // const ListItem = ({value}) => {
     //     let [start, setStart] = useState(true);
     //     const handleStart=(code)=>{
@@ -108,65 +113,158 @@ const Home = () => {
     //     );
     // };
 
-    const AddCodeButton = ({code_value}) => {
+     /* testing */ 
+    // const AddCodeButton = ({code_value}) => {
 
-        // let [start, setStart] = useState(true);
-        let [value, setValue] = useState('off');
-        let idVal="mainDivToggle_"+code_value.code;
-
-        const test=()=>{
-            if(value==='off'){
-                document.getElementById(idVal).style.backgroundColor='#00d500';
-                setValue('on'); 
-            }else{
-                document.getElementById(idVal).style.backgroundColor='red';
-                setValue('off'); 
-            }            
-            console.log(">> test>>",value);  
-        }
-
-        // const handleStart=(code)=>{
-        //     // console.log(">> handleStart Code",code);
-        //     // send SMS
-        //     let obj={
-        //         "message" : code,
-        //         "number":userData.data.senderMobile,
-        //         "email":userData.data.email,
-        //         "mobile":userData.data.mobile,
-        //         "buildId":userData.data.buildId,
-        //     }
-        //     ItemService.sendSMS(obj).then((items) => {
-        //         console.log(">> SMS Sent",items);   
-        //     });
-        //     setStart(false);
-        // }
+    //     // let [start, setStart] = useState(true);
+    //     let [value, setValue] = useState('off');
+    //     console.log(">> test>>",value); 
         
-        // const handleStop=(code)=>{
-        //     console.log(">> handleStop Code",code);
-        //     setStart(true);
-        // }
+    //     let idVal="mainDivToggle_"+code_value.code;
+
+    //     const test=()=>{
+    //         if(value==='off'){
+    //             document.getElementById(idVal).style.backgroundColor='#00d500';
+    //             setValue('on'); 
+    //         }else{
+    //             document.getElementById(idVal).style.backgroundColor='red';
+    //             setValue('off'); 
+    //         }            
+    //         // console.log(">> test>>",value);  
+    //     }
+
+    //     // const handleStart=(code)=>{
+    //     //     // console.log(">> handleStart Code",code);
+    //     //     // send SMS
+    //     //     let obj={
+    //     //         "message" : code,
+    //     //         "number":userData.data.senderMobile,
+    //     //         "email":userData.data.email,
+    //     //         "mobile":userData.data.mobile,
+    //     //         "buildId":userData.data.buildId,
+    //     //     }
+    //     //     ItemService.sendSMS(obj).then((items) => {
+    //     //         console.log(">> SMS Sent",items);   
+    //     //     });
+    //     //     setStart(false);
+    //     // }
         
-        return (
-            <>
-                <div className="mainCode">
-                    <div className="ms-2 me-auto">
-                        <div className="fw-bold">{code_value.code}</div>                        
-                    </div>
-                    <div className="mainDivToggle" id={idVal}>
-                        <input id="toggle" className="toggle" type="checkbox" role="switch" onClick={(e)=>test()} name="toggle" value={value} />
-                        <label  className="slot"> {/* htmlFor="toggle" */}
-                            <span className="slot__label">OOFF</span>
-                            <span className="slot__label">OON</span>
-                        </label>
-                    </div>
+    //     // const handleStop=(code)=>{
+    //     //     console.log(">> handleStop Code",code);
+    //     //     setStart(true);
+    //     // }
+        
+    //     return (
+    //         <>
+    //             <div className="mainCode">
+    //                 <div className="ms-2 me-auto">
+    //                     <div className="fw-bold">{code_value.code}</div>                        
+    //                 </div>
+    //                 <div className="mainDivToggle" id={idVal}>
+    //                     <input id="toggle" className="toggle" type="checkbox" role="switch" onClick={(e)=>test()} name="toggle" value={value} />
+    //                     <label  className="slot"> {/* htmlFor="toggle" */}
+    //                         <span className="slot__label">OOFF</span>
+    //                         <span className="slot__label">OON</span>
+    //                     </label>
+    //                 </div>
                     
-                    <div className="codeDetails">
-                        <p>{code_value.name}</p>
-                    </div>
-                </div>
-            </>
-        );
-    };
+    //                 <div className="codeDetails">
+    //                     <p>{code_value.name}</p>
+    //                 </div>
+    //             </div>
+    //         </>
+    //     );
+    // };
+   
+    const callGetStatus=()=>{
+        let getSms = {"userBuildId":userData.data.buildId, "status":1}    
+            ItemService.getSMSDetails(getSms).then((items) => {
+                console.log(">>GET SMS Sent",items); 
+                setSmsStatus(items.data)
+                if(items.data.length > 0){
+                    for(let i=0; i<items.data.length; i++){
+                        let id=items.data[i].code + "_1";
+                        if(items.data[i].status===1){
+                            document.getElementById(id).style.backgroundColor='#00d500';
+                            document.getElementById(items.data[i].code).checked = true;
+                        }else{
+                            document.getElementById(id).style.backgroundColor='red';
+                            document.getElementById(items.data[i].code).checked = false;
+                        }
+                    }
+                    
+                }
+                
+            }); 
+    }
+    const handleAcccept=(e)=>{
+        document.getElementById(e.target.id+"_1").style.backgroundColor='#00d500';
+        e.target.checked=true;
+
+        let obj={
+                "number":userData.data.senderMobile,
+                "email":userData.data.email,
+                "mobile":userData.data.mobile,
+                "buildId":userData.data.buildId,
+                "status":1,
+                "code":e.target.id
+            }
+            ItemService.sendSMS(obj).then((items) => {
+                console.log(">> SMS Sent",items); 
+                toast.current.show({
+                    severity: 'info',
+                    summary: 'Confirmed',
+                    detail: 'Motor is Running Now !!',
+                    life: 5000,
+                });  
+            }); 
+            callGetStatus();
+        
+    }
+    const handleReject=(e)=>{
+        document.getElementById(e.target.id+"_1").style.backgroundColor='red';
+        e.target.checked=false;
+    }
+    const handleOnOff=(e)=>{
+        // console.log(">> idVal",e);
+        // console.log(">> idVal",e.target.checked);
+        if(e.target.checked){  // ON          
+            confirmDialog({
+                message: 'Are you sure you want to proceed?',
+                header: 'Confirmation',
+                icon: 'pi pi-exclamation-triangle',
+                accept: () => {
+                    handleAcccept(e)
+                },    
+                reject:  () => {
+                    handleReject(e)
+                }                                   
+            });
+            document.getElementById(e.target.id+"_1").style.backgroundColor='red';
+            e.target.checked=false;
+        }else{  // OFF
+            document.getElementById(e.target.id+"_1").style.backgroundColor='red';
+            e.target.checked=false;
+
+            let obj={
+                "buildId":userData.data.buildId,
+                "_id":getSmsStatus[0]._id,
+                "status":0
+            }
+            ItemService.sendSMS(obj).then((items) => {
+                console.log(">> Update OFF",items); 
+                toast.current.show({
+                    severity: 'warn',
+                    summary: 'Confirmed',
+                    detail: 'Motor is STOP Now !!',
+                    life: 5000,
+                });
+                callGetStatus();
+            }); 
+                       
+           
+        }            
+    }
 
     useEffect(() => {
         console.log(">> Home Running");
@@ -178,19 +276,33 @@ const Home = () => {
             setAdmin(false)
         }
         dashboardDetails();
-        
+        // callGetStatus();
+
+        setTimeout(() => {
+            callGetStatus();
+        }, 300);
+
+
+        // setInterval(() => { 
+        //     console.log('>> --> setInterval GET SMS Status');
+        //     callGetStatus();
+        // }, 3000);
+
         // eslint-disable-next-line
     }, []);
+    
 
     return (  
-        <div>  
+        <div>              
             <Layout/>
+            <Toast ref={toast} />
             <div id="content-wrapper" className="d-flex flex-column">  
                     <div id="content">  
+                    
                         <main id="main" className="main">
                             <div className="row">
                                 <div className="pagetitle col-sm-11">
-                                    <h1>Home</h1>
+                                    <h1>Home</h1>                                    
                                     <nav>
                                         <ol className="breadcrumb">
                                             <li className="breadcrumb-item">Complete Details of the Product</li>
@@ -198,9 +310,13 @@ const Home = () => {
                                     </nav>                               
                                 </div>
                                 <div className="col-sm-1">
-                                    <InputSwitch checked={showCard} onChange={(e) => setShowCard(e.value)} />
+                                    <InputSwitch checked={showCard} onChange={(e) => setShowCard(!showCard)} />
                                 </div>
                             </div>
+
+                            {/* <p><Moment format='MMMM Do YYYY, h:mm:ss a'>{date}</Moment></p> */}
+                            
+
                             {showCard && 
                                 <section className="section dashboard">
                                     <div className="row">                    
@@ -254,9 +370,64 @@ const Home = () => {
                             <section>
                                 {/* <h5 className="pagetitle">List of Codes: </h5> */}
                                     {!admin && 
-                                        //<AddCodeButton />
                                         codeData.length? codeData.map((value,index) => {
-                                            return <AddCodeButton key={index} code_value={value} />        
+                                            // return <AddCodeButton key={index} code_value={value} /> 
+                                            let idVal="mainDivToggle_"+value.code;   
+                                            return (
+                                                    <div className="mainCode" key={index}>
+                                                        <div className="ms-2 me-auto">
+                                                            <div className="fw-bold">{value.name}</div>                        
+                                                        </div>
+                                                        <div className="mainDivToggle" id={idVal+"_1"}>
+                                                            <input id={idVal} className="toggle" type="checkbox" role="switch" onClick={(e)=>handleOnOff(e)} name="toggle" value={'off'}/>
+                                                            {/* value={valueOnOff}  */}
+                                                            <label  className="slot"> {/* htmlFor="toggle" */}
+                                                                <span className="slot__label">OOFF</span>
+                                                                <span className="slot__label">OON</span>
+                                                            </label>
+                                                        </div>
+                                                        
+                                                        <div className="codeDetails">
+                                                            <b>Motor Start Time : </b>
+                                                            <p><Moment format='MMMM Do YYYY'>{getSmsStatus?getSmsStatus[0].sent_time:''}</Moment><br/>
+                                                            <Moment format='hh:mm:ss A'>{getSmsStatus?getSmsStatus[0].sent_time:''}</Moment></p>
+                                                        </div>
+
+                                                        <div className="codeDetails">
+                                                            <b>Motor Start Time : </b>
+                                                            <p><Moment format='MMMM Do YYYY'>{getSmsStatus?getSmsStatus[0].sent_time:''}</Moment><br/>
+                                                            <Moment format='hh:mm:ss A'>{getSmsStatus?getSmsStatus[0].sent_time:''}</Moment></p>
+                                                        </div>
+
+                                                        <div className="list-group">
+                                                            <a href="/#" className="list-group-item list-group-item-action active" aria-current="true">
+                                                            <div className="d-flex w-100 justify-content-between">
+                                                                <h5 className="mb-1">List group item heading</h5>
+                                                                <small>3 days ago</small>
+                                                            </div>
+                                                            <p className="mb-1">Some placeholder content in a paragraph.</p>
+                                                            <small>And some small print.</small>
+                                                            </a>
+                                                            <a href="/#" className="list-group-item list-group-item-action">
+                                                            <div className="d-flex w-100 justify-content-between">
+                                                                <h5 className="mb-1">List group item heading</h5>
+                                                                <small className="text-muted">3 days ago</small>
+                                                            </div>
+                                                            <p className="mb-1">Some placeholder content in a paragraph.</p>
+                                                            <small className="text-muted">And some muted small print.</small>
+                                                            </a>
+                                                            <a href="/#" className="list-group-item list-group-item-action">
+                                                            <div className="d-flex w-100 justify-content-between">
+                                                                <h5 className="mb-1">List group item heading</h5>
+                                                                <small className="text-muted">3 days ago</small>
+                                                            </div>
+                                                            <p className="mb-1">Some placeholder content in a paragraph.</p>
+                                                            <small className="text-muted">And some muted small print.</small>
+                                                            </a>
+                                                        </div>
+                                                        
+                                                    </div>
+                                            );    
                                         })
                                     : null}
                                 

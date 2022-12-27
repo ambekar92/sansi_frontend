@@ -116,7 +116,8 @@ const AddCodes = () => {
   };
 
   const getLoadTable = (userTableData) => {
-    if (userTableData?.length === 0) {
+    const newLocal = userTableData?.length;
+    if (newLocal === 0) {
       $("#example")
         .DataTable({
           paging: true,

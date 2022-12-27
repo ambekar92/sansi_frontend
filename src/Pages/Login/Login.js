@@ -20,7 +20,7 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     let obj = {
-      email: username,
+      mobile: username,
       password: password,
     };
     ItemService.login(obj).then((items) => {

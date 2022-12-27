@@ -137,6 +137,12 @@ const AddUser = () => {
     setMobile(event.target.value.slice(0, limit));
   };
 
+  const handleSenderNumChange = (event) => {
+    const limit = 10;
+    setSenderMobile(event.target.value.slice(0, limit));
+  };
+
+
   const toastMsg = (a, b, c) => {
     // "success" , "error", "warn", "info"
     //toastMsg("success","Confirmed","User Added successfully !!");
@@ -452,18 +458,20 @@ const AddUser = () => {
                                     htmlFor="inputText"
                                     className="col-sm-12 col-form-label"
                                   >
-                                    Sender Mobile Number (+91 ---)                                    
+                                    Sender Mobile Number                                   
                                     <span className="buildDetails">
                                       From which Number Device will Receive the Messages
                                     </span>
                                   </label>
                                   <input
-                                    type="text"
+                                    type="number"
+                                    maxLength={10}
                                     className="form-control"
                                     name="senderMobile"
                                     value={senderMobile || ""}
-                                    onChange={(e) => setSenderMobile(e.target.value)}
+                                    onChange={handleSenderNumChange}
                                   />
+
                                 </div>
 
                               </div>
