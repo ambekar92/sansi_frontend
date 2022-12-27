@@ -1311,6 +1311,9 @@ h1, h2, h3, h4, h5, h6 {
   .col-sm-1 {
     width: 20%;
   } 
+  .col-sm-6{
+    width: 50%;
+  }
 }
 
 .p-dialog{
@@ -1330,7 +1333,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* CSS for ON and OFF Button */
 .mainCode{
-  margin-bottom: 10%;
+  margin-bottom: 4%;
 }
 .mainDivToggle{
   background: red;
@@ -1420,3 +1423,14 @@ h1, h2, h3, h4, h5, h6 {
   transform-origin: 50% 100%;
 }
 
+/* TIME */
+.time{
+  color: #0017d5;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+}
+
+.listTime{
+  font-weight: 500;
+  font-size: 14px;
+}

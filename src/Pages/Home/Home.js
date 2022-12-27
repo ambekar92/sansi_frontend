@@ -12,7 +12,8 @@ const Home = () => {
     let [codeData, setCodeData] = useState([]);
     let [showCard, setShowCard] = useState(false);
     let [admin, setAdmin] = useState(false);
-    let [getSmsStatus, setSmsStatus] = useState();
+    let [getSmsStatus, setSmsStatus] = useState([]);
+    let [getLast3Status, setLast3Status] = useState([]);
     let toast = useRef();
         
     let [userData] = useState(JSON.parse(localStorage.getItem('userData'))); // User Details from LocalStorage
@@ -54,16 +55,16 @@ const Home = () => {
         });        
     }
 
-    const AdminListItem = ({value}) => {
-        return (
-            <li className="list-group-item d-flex justify-content-between align-items-start">
-                <div className="ms-2 me-auto">
-                    <div className="fw-bold">{value.code}</div>
-                        {value.name}
-                </div>
-            </li>
-        );
-    };
+    // const AdminListItem = ({value}) => {
+    //     return (
+    //         <li className="list-group-item d-flex justify-content-between align-items-start">
+    //             <div className="ms-2 me-auto">
+    //                 <div className="fw-bold">{value.code}</div>
+    //                     {value.name}
+    //             </div>
+    //         </li>
+    //     );
+    // };
 
     /* If LIST Code is added then this will be used */ 
     // const ListItem = ({value}) => {
@@ -179,8 +180,9 @@ const Home = () => {
     const callGetStatus=()=>{
         let getSms = {"userBuildId":userData.data.buildId, "status":1}    
             ItemService.getSMSDetails(getSms).then((items) => {
-                console.log(">>GET SMS Sent",items); 
+                console.log(">>callGetStatus ",items); 
                 setSmsStatus(items.data)
+                setLast3Status(items.last3info)
                 if(items.data.length > 0){
                     for(let i=0; i<items.data.length; i++){
                         let id=items.data[i].code + "_1";
@@ -207,10 +209,12 @@ const Home = () => {
                 "mobile":userData.data.mobile,
                 "buildId":userData.data.buildId,
                 "status":1,
-                "code":e.target.id
+                "code":e.target.id,
+                "message":"*ON#"
             }
             ItemService.sendSMS(obj).then((items) => {
                 console.log(">> SMS Sent",items); 
+                callGetStatus();
                 toast.current.show({
                     severity: 'info',
                     summary: 'Confirmed',
@@ -218,7 +222,7 @@ const Home = () => {
                     life: 5000,
                 });  
             }); 
-            callGetStatus();
+            
         
     }
     const handleReject=(e)=>{
@@ -249,7 +253,8 @@ const Home = () => {
             let obj={
                 "buildId":userData.data.buildId,
                 "_id":getSmsStatus[0]._id,
-                "status":0
+                "status":0,
+                "message":"*OFF#"
             }
             ItemService.sendSMS(obj).then((items) => {
                 console.log(">> Update OFF",items); 
@@ -265,6 +270,7 @@ const Home = () => {
            
         }            
     }
+    
 
     useEffect(() => {
         console.log(">> Home Running");
@@ -280,13 +286,13 @@ const Home = () => {
 
         setTimeout(() => {
             callGetStatus();
-        }, 300);
+        }, 200);
 
 
-        // setInterval(() => { 
-        //     console.log('>> --> setInterval GET SMS Status');
-        //     callGetStatus();
-        // }, 3000);
+        setInterval(() => { 
+            console.log('>> --> setInterval GET SMS Status');
+            callGetStatus();
+        }, 60000);
 
         // eslint-disable-next-line
     }, []);
@@ -375,80 +381,79 @@ const Home = () => {
                                             let idVal="mainDivToggle_"+value.code;   
                                             return (
                                                     <div className="mainCode" key={index}>
-                                                        <div className="ms-2 me-auto">
+                                                        <div className="me-auto">
                                                             <div className="fw-bold">{value.name}</div>                        
                                                         </div>
                                                         <div className="mainDivToggle" id={idVal+"_1"}>
                                                             <input id={idVal} className="toggle" type="checkbox" role="switch" onClick={(e)=>handleOnOff(e)} name="toggle" value={'off'}/>
-                                                            {/* value={valueOnOff}  */}
                                                             <label  className="slot"> {/* htmlFor="toggle" */}
                                                                 <span className="slot__label">OOFF</span>
                                                                 <span className="slot__label">OON</span>
                                                             </label>
                                                         </div>
                                                         
-                                                        <div className="codeDetails">
-                                                            <b>Motor Start Time : </b>
-                                                            <p><Moment format='MMMM Do YYYY'>{getSmsStatus?getSmsStatus[0].sent_time:''}</Moment><br/>
-                                                            <Moment format='hh:mm:ss A'>{getSmsStatus?getSmsStatus[0].sent_time:''}</Moment></p>
-                                                        </div>
+                                                        {getSmsStatus.length > 0 && 
+                                                            <div className="row mt-3">
+                                                                <div className="col-sm-6">
+                                                                    <b>Start Time</b><br/>
+                                                                    <span className="time"><Moment format='Do MMM YY'>{getSmsStatus.length > 0?getSmsStatus[0].sent_time:''}</Moment> </span>
+                                                                    <br/>
+                                                                    <span className="time"><Moment format='hh:mm:ss A'>{getSmsStatus.length > 0?getSmsStatus[0].sent_time:''}</Moment></span>
+                                                                </div>
 
-                                                        <div className="codeDetails">
-                                                            <b>Motor Start Time : </b>
-                                                            <p><Moment format='MMMM Do YYYY'>{getSmsStatus?getSmsStatus[0].sent_time:''}</Moment><br/>
-                                                            <Moment format='hh:mm:ss A'>{getSmsStatus?getSmsStatus[0].sent_time:''}</Moment></p>
-                                                        </div>
-
-                                                        <div className="list-group">
-                                                            <a href="/#" className="list-group-item list-group-item-action active" aria-current="true">
-                                                            <div className="d-flex w-100 justify-content-between">
-                                                                <h5 className="mb-1">List group item heading</h5>
-                                                                <small>3 days ago</small>
+                                                                <div className="col-sm-6">
+                                                                    <b>Completed Time</b><br/>
+                                                                    <span className="time"><Moment format='Do MMM YY'>{getSmsStatus.length>0?getSmsStatus[0].stop_time:''}</Moment></span>
+                                                                    <br/>
+                                                                    <span className="time"><Moment format='hh:mm:ss A'>{getSmsStatus.length>0?getSmsStatus[0].stop_time:''}</Moment></span>
+                                                                </div>
                                                             </div>
-                                                            <p className="mb-1">Some placeholder content in a paragraph.</p>
-                                                            <small>And some small print.</small>
-                                                            </a>
-                                                            <a href="/#" className="list-group-item list-group-item-action">
-                                                            <div className="d-flex w-100 justify-content-between">
-                                                                <h5 className="mb-1">List group item heading</h5>
-                                                                <small className="text-muted">3 days ago</small>
-                                                            </div>
-                                                            <p className="mb-1">Some placeholder content in a paragraph.</p>
-                                                            <small className="text-muted">And some muted small print.</small>
-                                                            </a>
-                                                            <a href="/#" className="list-group-item list-group-item-action">
-                                                            <div className="d-flex w-100 justify-content-between">
-                                                                <h5 className="mb-1">List group item heading</h5>
-                                                                <small className="text-muted">3 days ago</small>
-                                                            </div>
-                                                            <p className="mb-1">Some placeholder content in a paragraph.</p>
-                                                            <small className="text-muted">And some muted small print.</small>
-                                                            </a>
-                                                        </div>
-                                                        
+                                                        }
+                                                            
                                                     </div>
                                             );    
                                         })
                                     : null}
+
+                                                       
+                                    {!admin && 
+                                        getLast3Status.length? getLast3Status.map((value,index) => {
+                                            return (
+                                                <div className="col-lg-12" key={index}>
+                                                    <div className="list-group">
+                                                        <a href="/#" className="list-group-item list-group-item-action" aria-current="true">
+                                                        <div className="d-flex w-200 justify-content-between">
+                                                            <h5 className="mb-1 ">{ value ? value.smsBody:''}  -TEST </h5>
+                                                            {/* <small className="listTime">
+                                                            </small> */}
+                                                        </div>
+                                                        <p className="mb-1 ">
+                                                            Start : <span className="listTime"><Moment format='Do MMM YY hh:mm:ss A'>{value ? value.sent_time:''}</Moment></span>
+                                                        </p>
+                                                        <p className="mb-1">
+                                                            Completed : <span className="listTime"><Moment format='Do MMM YY hh:mm:ss A'>{value ? value.stop_time:''}</Moment></span>
+                                                        </p>
+                                                        {/* <small>And some small print.</small> */}
+                                                        </a>
+                                                        
+                                                    </div>
+                                                </div>
+                                            )
+                                        })
+                                    : null}      
+                                                    
                                 
                                 <ol className="list-group list-group-numbered">
-                                    {/* Show in the list */}
-                                    {/* {!admin && 
-                                        codeData.length? codeData.map((value,index) => {
-                                            return <ListItem key={index} value={value} />        
-                                        })
-                                    : null} */}
-
                                     {/* Show in ON OFF Button */}
-                                    {admin && 
+                                    {/* {admin && 
                                     codeData.length? codeData.map((value,index) => {
                                         return <AdminListItem key={index} value={value} />        
                                     })
-                                    : null}                                  
+                                    : null}                                   */}
                                     
                                     {/* List of Messages received from Mobile */}
                                     <ul><br/>
-                                    {smsData &&  
+                                    {admin &&  
                                         smsData.map((value,index) => {
                                             // let data = <><p><b>Address</b>: {value.address}<br/><b>BuildID</b>: {value.buildId}<br/><b>Body</b>: {value.body}</p>  </> 
                                             let data = <li key={index}><b>Address</b>: {value.address}<br/><b>BuildID</b>: {value.buildId}<br/><b>Body</b>: {value.body} <hr/></li>  
