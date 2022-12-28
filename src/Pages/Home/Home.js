@@ -286,7 +286,7 @@ const Home = () => {
 
         setTimeout(() => {
             callGetStatus();
-        }, 200);
+        }, 400);
 
 
         setInterval(() => { 
