@@ -250,11 +250,22 @@ const Home = () => {
             document.getElementById(e.target.id+"_1").style.backgroundColor='red';
             e.target.checked=false;
 
+            let param ={
+                "buildId":userData.data.buildId,
+                "body":"Motor OFF by the USER",
+                "address": "+91"+ userData.data.mobile,
+                "date":Date.now()  
+            }
+            ItemService.saveSmsinfo(param).then((items) => {
+                console.log(">> Trun OFF By USER",items);                 
+            }); 
+
             let obj={
                 "buildId":userData.data.buildId,
                 "_id":getSmsStatus[0]._id,
                 "status":0,
-                "message":"*OFF#"
+                "message":"*OFF#",
+                "number":userData.data.senderMobile,
             }
             ItemService.sendSMS(obj).then((items) => {
                 console.log(">> Update OFF",items); 
@@ -266,6 +277,7 @@ const Home = () => {
                 });
                 callGetStatus();
             }); 
+            
                        
            
         }            
@@ -286,7 +298,7 @@ const Home = () => {
 
         setTimeout(() => {
             callGetStatus();
-        }, 400);
+        }, 800);
 
 
         setInterval(() => { 
@@ -393,7 +405,7 @@ const Home = () => {
                                                     </div>
                                                     
                                                     {getSmsStatus.length > 0 && 
-                                                        <div className="row mt-3">
+                                                        <div className="row mt-3 rowTitle">
                                                             <div className="col-sm-6">
                                                                 <b>Start Time</b><br/>
                                                                 <span className="time"><Moment format='Do MMM YY'>{getSmsStatus.length > 0?getSmsStatus[0].sent_time:''}</Moment> </span>
@@ -402,7 +414,7 @@ const Home = () => {
                                                             </div>
 
                                                             <div className="col-sm-6 completedTime">
-                                                                <b>Completed Time</b><br/>
+                                                                <b>Running Time</b><br/>
                                                                 <span className="time"><Moment format='Do MMM YY'>{getSmsStatus.length>0?getSmsStatus[0].stop_time:''}</Moment></span>
                                                                 <br/>
                                                                 <span className="time"><Moment format='hh:mm:ss A'>{getSmsStatus.length>0?getSmsStatus[0].stop_time:''}</Moment></span>
@@ -412,8 +424,6 @@ const Home = () => {
                                                                 <p>{getSmsStatus.length > 0 ? getSmsStatus[0].timeDuration : ''}</p>
                                                             </div>
                                                         </div>
-
-                                                       
                                                     }
                                                         
                                                 </div>
@@ -429,7 +439,7 @@ const Home = () => {
                                                 <div className="list-group">
                                                     <a href="/#" className="list-group-item list-group-item-action" aria-current="true">
                                                     <div className="d-flex w-200 justify-content-between">
-                                                        <h5 className="mb-1 listTitle">{ value ? value.smsBody:''}  -TEST </h5>
+                                                        <h5 className="mb-1 listTitle">{ value ? value.smsBody:''}</h5>
                                                         {/* <small className="listTime">
                                                         </small> */}
                                                     </div>

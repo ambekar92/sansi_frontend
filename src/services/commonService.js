@@ -213,6 +213,12 @@ async function getSMSDetails(param) {
     return callPOST(api_url,param);
 }
 
+//POST Save the SMS Message from User did OFF 
+async function saveSmsinfo(param) {
+    let api_url= config.BASE_URL + 'api/save_smsinfo';
+    return callPOST(api_url,param);
+}
+
 // eslint-disable-next-line
 const func = {
     getConfig,
@@ -235,7 +241,8 @@ const func = {
     deleteRecord,
     getUserSMSData,
     sendSMS,
-    getSMSDetails
+    getSMSDetails,
+    saveSmsinfo
 };
 
 export default func;

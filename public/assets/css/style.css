@@ -1331,6 +1331,8 @@ h1, h2, h3, h4, h5, h6 {
   text-shadow: 1px 1px 3px #0064e159;
 }
 
+/* HOME SCREEN */
+
 /* CSS for ON and OFF Button */
 .mainCode{
   margin-bottom: 4%;
@@ -1452,4 +1454,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 .completedTime{
   text-align: end;
+}
+
+.rowTitle{
+  background-color: #15ff1536;
+  border-radius: 5px;
 }
