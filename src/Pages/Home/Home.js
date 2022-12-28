@@ -303,169 +303,175 @@ const Home = () => {
             <Layout/>
             <Toast ref={toast} />
             <div id="content-wrapper" className="d-flex flex-column">  
-                    <div id="content">  
-                    
-                        <main id="main" className="main">
-                            <div className="row">
-                                <div className="pagetitle col-sm-11">
-                                    <h1>Home</h1>                                    
-                                    <nav>
-                                        <ol className="breadcrumb">
-                                            <li className="breadcrumb-item">Complete Details of the Product</li>
-                                        </ol>
-                                    </nav>                               
-                                </div>
-                                <div className="col-sm-1">
-                                    <InputSwitch checked={showCard} onChange={(e) => setShowCard(!showCard)} />
-                                </div>
+                <div id="content">  
+                
+                    <main id="main" className="main">
+                        <div className="row">
+                            <div className="pagetitle col-sm-11">
+                                <h1>Home</h1>                                    
+                                <nav>
+                                    <ol className="breadcrumb">
+                                        <li className="breadcrumb-item">Complete Details of the Product</li>
+                                    </ol>
+                                </nav>                               
                             </div>
+                            <div className="col-sm-1">
+                                <InputSwitch checked={showCard} onChange={(e) => setShowCard(!showCard)} />
+                            </div>
+                        </div>
 
-                            {/* <p><Moment format='MMMM Do YYYY, h:mm:ss a'>{date}</Moment></p> */}
-                            
+                        {/* <p><Moment format='MMMM Do YYYY, h:mm:ss a'>{date}</Moment></p> */}
+                        
 
-                            {showCard && 
-                                <section className="section dashboard">
-                                    <div className="row">                    
-                                        <div className="col-lg-12">
-                                            <div className="row">
-                                                    <div className="col-xxl-4 col-md-6">
-                                                        <div className="card info-card sales-card">
-                                                            <div className="card-body">
-                                                            <h5 className="card-title">Code Triggered / Total Codes</h5>
-                                                            <div className="d-flex align-items-center">
-                                                                <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                                                {userData.data.role === 'ADMIN' && <a href="/add-code"><i className="bi bi-pencil-square"></i></a>}
-                                                                {userData.data.role !== 'ADMIN' && <i className="bi bi-pencil-square"></i>}
+                        {showCard && 
+                            <section className="section dashboard">
+                                <div className="row">                    
+                                    <div className="col-lg-12">
+                                        <div className="row">
+                                                <div className="col-xxl-4 col-md-6">
+                                                    <div className="card info-card sales-card">
+                                                        <div className="card-body">
+                                                        <h5 className="card-title">Code Triggered / Total Codes</h5>
+                                                        <div className="d-flex align-items-center">
+                                                            <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                            {userData.data.role === 'ADMIN' && <a href="/add-code"><i className="bi bi-pencil-square"></i></a>}
+                                                            {userData.data.role !== 'ADMIN' && <i className="bi bi-pencil-square"></i>}
 
-                                                                </div>
-                                                                <div className="ps-3">
-                                                                <h6>d145 / d200</h6>
-
-                                                                {/* <span className="text-success small pt-1 fw-bold">12%</span> <span className="text-muted small pt-2 ps-1">increase</span> */}
-                                                                </div>
                                                             </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    {userData.data.role === 'ADMIN' && 
-                                                    <div className="col-xxl-4 col-md-6">
-                                                        <div className="card info-card sales-card">
-                                                            <div className="card-body">
-                                                            <h5 className="card-title">Total Users</h5>
-                                                            <div className="d-flex align-items-center">
-                                                                <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                                                <a href="/add-user"><i className="bi bi-people-fill"></i></a>
-                                                                </div>
-                                                                <div className="ps-3">
-                                                                <h6>{dashboardData.users}</h6>
-                                                                {/* <span className="text-success small pt-1 fw-bold">12%</span> <span className="text-muted small pt-2 ps-1">increase</span> */}
-                                                                </div>
-                                                            </div>
+                                                            <div className="ps-3">
+                                                            <h6>d145 / d200</h6>
+
+                                                            {/* <span className="text-success small pt-1 fw-bold">12%</span> <span className="text-muted small pt-2 ps-1">increase</span> */}
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    }
-                                            </div>
-                                        </div>   
-                                        
-                                    <hr/>                             
-                                    </div>
-                                </section>
-                            }
-
-                            <section>
-                                {/* <h5 className="pagetitle">List of Codes: </h5> */}
-                                    {!admin && 
-                                        codeData.length? codeData.map((value,index) => {
-                                            // return <AddCodeButton key={index} code_value={value} /> 
-                                            let idVal="mainDivToggle_"+value.code;   
-                                            return (
-                                                    <div className="mainCode" key={index}>
-                                                        <div className="me-auto">
-                                                            <div className="fw-bold">{value.name}</div>                        
                                                         </div>
-                                                        <div className="mainDivToggle" id={idVal+"_1"}>
-                                                            <input id={idVal} className="toggle" type="checkbox" role="switch" onClick={(e)=>handleOnOff(e)} name="toggle" value={'off'}/>
-                                                            <label  className="slot"> {/* htmlFor="toggle" */}
-                                                                <span className="slot__label">OOFF</span>
-                                                                <span className="slot__label">OON</span>
-                                                            </label>
-                                                        </div>
-                                                        
-                                                        {getSmsStatus.length > 0 && 
-                                                            <div className="row mt-3">
-                                                                <div className="col-sm-6">
-                                                                    <b>Start Time</b><br/>
-                                                                    <span className="time"><Moment format='Do MMM YY'>{getSmsStatus.length > 0?getSmsStatus[0].sent_time:''}</Moment> </span>
-                                                                    <br/>
-                                                                    <span className="time"><Moment format='hh:mm:ss A'>{getSmsStatus.length > 0?getSmsStatus[0].sent_time:''}</Moment></span>
-                                                                </div>
-
-                                                                <div className="col-sm-6">
-                                                                    <b>Completed Time</b><br/>
-                                                                    <span className="time"><Moment format='Do MMM YY'>{getSmsStatus.length>0?getSmsStatus[0].stop_time:''}</Moment></span>
-                                                                    <br/>
-                                                                    <span className="time"><Moment format='hh:mm:ss A'>{getSmsStatus.length>0?getSmsStatus[0].stop_time:''}</Moment></span>
-                                                                </div>
-                                                            </div>
-                                                        }
-                                                            
-                                                    </div>
-                                            );    
-                                        })
-                                    : null}
-
-                                                       
-                                    {!admin && 
-                                        getLast3Status.length? getLast3Status.map((value,index) => {
-                                            return (
-                                                <div className="col-lg-12" key={index}>
-                                                    <div className="list-group">
-                                                        <a href="/#" className="list-group-item list-group-item-action" aria-current="true">
-                                                        <div className="d-flex w-200 justify-content-between">
-                                                            <h5 className="mb-1 ">{ value ? value.smsBody:''}  -TEST </h5>
-                                                            {/* <small className="listTime">
-                                                            </small> */}
-                                                        </div>
-                                                        <p className="mb-1 ">
-                                                            Start : <span className="listTime"><Moment format='Do MMM YY hh:mm:ss A'>{value ? value.sent_time:''}</Moment></span>
-                                                        </p>
-                                                        <p className="mb-1">
-                                                            Completed : <span className="listTime"><Moment format='Do MMM YY hh:mm:ss A'>{value ? value.stop_time:''}</Moment></span>
-                                                        </p>
-                                                        {/* <small>And some small print.</small> */}
-                                                        </a>
-                                                        
                                                     </div>
                                                 </div>
-                                            )
-                                        })
-                                    : null}      
-                                                    
-                                
-                                <ol className="list-group list-group-numbered">
-                                    {/* Show in ON OFF Button */}
-                                    {/* {admin && 
-                                    codeData.length? codeData.map((value,index) => {
-                                        return <AdminListItem key={index} value={value} />        
-                                    })
-                                    : null}                                   */}
+                                                {userData.data.role === 'ADMIN' && 
+                                                <div className="col-xxl-4 col-md-6">
+                                                    <div className="card info-card sales-card">
+                                                        <div className="card-body">
+                                                        <h5 className="card-title">Total Users</h5>
+                                                        <div className="d-flex align-items-center">
+                                                            <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                            <a href="/add-user"><i className="bi bi-people-fill"></i></a>
+                                                            </div>
+                                                            <div className="ps-3">
+                                                            <h6>{dashboardData.users}</h6>
+                                                            {/* <span className="text-success small pt-1 fw-bold">12%</span> <span className="text-muted small pt-2 ps-1">increase</span> */}
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                }
+                                        </div>
+                                    </div>   
                                     
-                                    {/* List of Messages received from Mobile */}
-                                    <ul><br/>
-                                    {admin &&  
-                                        smsData.map((value,index) => {
-                                            // let data = <><p><b>Address</b>: {value.address}<br/><b>BuildID</b>: {value.buildId}<br/><b>Body</b>: {value.body}</p>  </> 
-                                            let data = <li key={index}><b>Address</b>: {value.address}<br/><b>BuildID</b>: {value.buildId}<br/><b>Body</b>: {value.body} <hr/></li>  
-                                            return data; 
-                                        })
-                                    }
-                                    </ul>
-                                </ol>
+                                <hr/>                             
+                                </div>
                             </section>
+                        }
+
+                        <section>
+                            {/* <h5 className="pagetitle">List of Codes: </h5> */}
+                                {!admin && 
+                                    codeData.length? codeData.map((value,index) => {
+                                        // return <AddCodeButton key={index} code_value={value} /> 
+                                        let idVal="mainDivToggle_"+value.code;   
+                                        return (
+                                                <div className="mainCode" key={index}>
+                                                    <div className="me-auto">
+                                                        <div className="fw-bold">{value.name}</div>                        
+                                                    </div>
+                                                    <div className="mainDivToggle" id={idVal+"_1"}>
+                                                        <input id={idVal} className="toggle" type="checkbox" role="switch" onClick={(e)=>handleOnOff(e)} name="toggle" value={'off'}/>
+                                                        <label  className="slot"> {/* htmlFor="toggle" */}
+                                                            <span className="slot__label">OOFF</span>
+                                                            <span className="slot__label">OON</span>
+                                                        </label>
+                                                    </div>
+                                                    
+                                                    {getSmsStatus.length > 0 && 
+                                                        <div className="row mt-3">
+                                                            <div className="col-sm-6">
+                                                                <b>Start Time</b><br/>
+                                                                <span className="time"><Moment format='Do MMM YY'>{getSmsStatus.length > 0?getSmsStatus[0].sent_time:''}</Moment> </span>
+                                                                <br/>
+                                                                <span className="time"><Moment format='hh:mm:ss A'>{getSmsStatus.length > 0?getSmsStatus[0].sent_time:''}</Moment></span>
+                                                            </div>
+
+                                                            <div className="col-sm-6 completedTime">
+                                                                <b>Completed Time</b><br/>
+                                                                <span className="time"><Moment format='Do MMM YY'>{getSmsStatus.length>0?getSmsStatus[0].stop_time:''}</Moment></span>
+                                                                <br/>
+                                                                <span className="time"><Moment format='hh:mm:ss A'>{getSmsStatus.length>0?getSmsStatus[0].stop_time:''}</Moment></span>
+                                                            </div>
+
+                                                            <div className="col-sm-12 duration">
+                                                                <p>{getSmsStatus.length > 0 ? getSmsStatus[0].timeDuration : ''}</p>
+                                                            </div>
+                                                        </div>
+
+                                                       
+                                                    }
+                                                        
+                                                </div>
+                                        );    
+                                    })
+                                : null}
+
+                                                    
+                                {!admin && 
+                                    getLast3Status.length? getLast3Status.map((value,index) => {
+                                        return (
+                                            <div className="col-lg-12" key={index}>
+                                                <div className="list-group">
+                                                    <a href="/#" className="list-group-item list-group-item-action" aria-current="true">
+                                                    <div className="d-flex w-200 justify-content-between">
+                                                        <h5 className="mb-1 listTitle">{ value ? value.smsBody:''}  -TEST </h5>
+                                                        {/* <small className="listTime">
+                                                        </small> */}
+                                                    </div>
+                                                    <p className="mb-1 pFont">
+                                                        Start : <span className="listTime"><Moment format='Do MMM YY hh:mm:ss A'>{value ? value.sent_time:''}</Moment></span>
+                                                    </p>
+                                                    <p className="mb-1 pFont">
+                                                        Completed : <span className="listTime"><Moment format='Do MMM YY hh:mm:ss A'>{value ? value.stop_time:''}</Moment></span>
+                                                    </p>
+                                                    {/* <small>And some small print.</small> */}
+                                                    </a>
+                                                    
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                : null}      
+                                                
                             
-                        </main>       
-                    </div>
+                            <ol className="list-group list-group-numbered">
+                                {/* Show in ON OFF Button */}
+                                {/* {admin && 
+                                codeData.length? codeData.map((value,index) => {
+                                    return <AdminListItem key={index} value={value} />        
+                                })
+                                : null}                                   */}
+                                
+                                {/* List of Messages received from Mobile */}
+                                <ul><br/>
+                                {admin &&  
+                                    smsData.map((value,index) => {
+                                        // let data = <><p><b>Address</b>: {value.address}<br/><b>BuildID</b>: {value.buildId}<br/><b>Body</b>: {value.body}</p>  </> 
+                                        let data = <li key={index}><b>Address</b>: {value.address}<br/><b>BuildID</b>: {value.buildId}<br/><b>Body</b>: {value.body} <hr/></li>  
+                                        return data; 
+                                    })
+                                }
+                                </ul>
+                            </ol>
+                        </section>
+                        
+                    </main>       
+                </div>
             </div>       
             
         </div>  
