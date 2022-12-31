@@ -523,6 +523,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 14px;
   padding: 10px 15px;
   transition: 0.3s;
+  background-color: #ff00004a;
 }
 .header-nav .profile .dropdown-item i {
   margin-right: 10px;
@@ -530,7 +531,7 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 0;
 }
 .header-nav .profile .dropdown-item:hover {
-  background-color: #f6f9ff;
+  background-color: #ff3e3e;
 }
 
 /*--------------------------------------------------------------
@@ -1331,6 +1332,10 @@ h1, h2, h3, h4, h5, h6 {
   text-shadow: 1px 1px 3px #0064e159;
 }
 
+
+
+
+
 /* HOME SCREEN */
 
 /* CSS for ON and OFF Button */
@@ -1459,4 +1464,17 @@ h1, h2, h3, h4, h5, h6 {
 .rowTitle{
   background-color: #15ff1536;
   border-radius: 5px;
+}
+
+.timeDuration{
+  letter-spacing: 1px;
+  word-spacing: 5px;
+}
+
+.countDisplay{
+  font-size: 40px !important;
+}
+.clockfill{
+  font-size: 40px;
+  color: #3d9f00;
 }

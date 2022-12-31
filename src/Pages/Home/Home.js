@@ -229,6 +229,7 @@ const Home = () => {
         document.getElementById(e.target.id+"_1").style.backgroundColor='red';
         e.target.checked=false;
     }
+
     const handleOnOff=(e)=>{
         // console.log(">> idVal",e);
         // console.log(">> idVal",e.target.checked);
@@ -252,12 +253,12 @@ const Home = () => {
 
             let param ={
                 "buildId":userData.data.buildId,
-                "body":"Motor OFF by the USER",
+                "body":"Motor Turn Off by the USER",
                 "address": "+91"+ userData.data.mobile,
                 "date":Date.now()  
             }
             ItemService.saveSmsinfo(param).then((items) => {
-                console.log(">> Trun OFF By USER",items);                 
+                console.log(">> Trun Off By USER",items);                 
             }); 
 
             let obj={
@@ -322,8 +323,8 @@ const Home = () => {
                             <div className="pagetitle col-sm-11">
                                 <h1>Home</h1>                                    
                                 <nav>
-                                    <ol className="breadcrumb">
-                                        <li className="breadcrumb-item">Complete Details of the Product</li>
+                                    <ol className="mb-0 breadcrumb">
+                                        <li className="breadcrumb-item">Complete Details of the Motor ON / OFF</li>
                                     </ol>
                                 </nav>                               
                             </div>
@@ -331,10 +332,7 @@ const Home = () => {
                                 <InputSwitch checked={showCard} onChange={(e) => setShowCard(!showCard)} />
                             </div>
                         </div>
-
-                        {/* <p><Moment format='MMMM Do YYYY, h:mm:ss a'>{date}</Moment></p> */}
-                        
-
+                       
                         {showCard && 
                             <section className="section dashboard">
                                 <div className="row">                    
@@ -343,17 +341,14 @@ const Home = () => {
                                                 <div className="col-xxl-4 col-md-6">
                                                     <div className="card info-card sales-card">
                                                         <div className="card-body">
-                                                        <h5 className="card-title">Code Triggered / Total Codes</h5>
+                                                        <h5 className="card-title">Today Triggered [ <Moment format='Do MMM YY'></Moment> ]</h5>
                                                         <div className="d-flex align-items-center">
                                                             <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                                            {userData.data.role === 'ADMIN' && <a href="/add-code"><i className="bi bi-pencil-square"></i></a>}
-                                                            {userData.data.role !== 'ADMIN' && <i className="bi bi-pencil-square"></i>}
-
+                                                            <i className="bi bi-clock-history"></i>
                                                             </div>
-                                                            <div className="ps-3">
-                                                            <h6>d145 / d200</h6>
-
-                                                            {/* <span className="text-success small pt-1 fw-bold">12%</span> <span className="text-muted small pt-2 ps-1">increase</span> */}
+                                                            <div className="ps-4">
+                                                            <h6 className="countDisplay">{dashboardData.count}</h6>
+                                                            {/* <span className="text-success small pt-1 fw-bold">01</span> <span className="text-muted small pt-2 ps-1">increase</span> */}
                                                             </div>
                                                         </div>
                                                         </div>
@@ -368,8 +363,8 @@ const Home = () => {
                                                             <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                                             <a href="/add-user"><i className="bi bi-people-fill"></i></a>
                                                             </div>
-                                                            <div className="ps-3">
-                                                            <h6>{dashboardData.users}</h6>
+                                                            <div className="ps-4">
+                                                            <h6 className="countDisplay">{dashboardData.users}</h6>
                                                             {/* <span className="text-success small pt-1 fw-bold">12%</span> <span className="text-muted small pt-2 ps-1">increase</span> */}
                                                             </div>
                                                         </div>
@@ -414,7 +409,11 @@ const Home = () => {
                                                             </div>
 
                                                             <div className="col-sm-6 completedTime">
-                                                                <b>Running Time</b><br/>
+                                                            {/* <div class="spinner-grow text-success spinner-grow-sm" role="status">
+                                                                <span class="visually-hidden">Loading...</span>  
+                                                            </div> */}
+                                                            <b> Running Time</b><br/>
+             
                                                                 <span className="time"><Moment format='Do MMM YY'>{getSmsStatus.length>0?getSmsStatus[0].stop_time:''}</Moment></span>
                                                                 <br/>
                                                                 <span className="time"><Moment format='hh:mm:ss A'>{getSmsStatus.length>0?getSmsStatus[0].stop_time:''}</Moment></span>
@@ -440,16 +439,27 @@ const Home = () => {
                                                     <a href="/#" className="list-group-item list-group-item-action" aria-current="true">
                                                     <div className="d-flex w-200 justify-content-between">
                                                         <h5 className="mb-1 listTitle">{ value ? value.smsBody:''}</h5>
-                                                        {/* <small className="listTime">
-                                                        </small> */}
                                                     </div>
-                                                    <p className="mb-1 pFont">
-                                                        Start : <span className="listTime"><Moment format='Do MMM YY hh:mm:ss A'>{value ? value.sent_time:''}</Moment></span>
-                                                    </p>
-                                                    <p className="mb-1 pFont">
-                                                        Completed : <span className="listTime"><Moment format='Do MMM YY hh:mm:ss A'>{value ? value.stop_time:''}</Moment></span>
-                                                    </p>
-                                                    {/* <small>And some small print.</small> */}
+                                                    
+                                                    <div className="row">
+                                                        <div className="col-sm-1">
+                                                            <div className="d-flex justify-content-center">
+                                                                <i className="bi bi-recycle clockfill"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-sm-11">
+                                                            <p className="mb-0 pFont">
+                                                                Start : <span className="listTime"><Moment format='Do MMM YY hh:mm:ss A'>{value ? value.sent_time:''}</Moment></span>
+                                                            </p>
+                                                            <p className="mb-0 pFont">
+                                                                End &nbsp;: <span className="listTime"><Moment format='Do MMM YY hh:mm:ss A'>{value ? value.stop_time:''}</Moment></span>
+                                                            </p>
+                                                            <p className="mb-0 pFont">
+                                                                Duration : <span class="badge bg-warning text-dark timeDuration"> {value ? value.timeDuration:''} </span>
+                                                            </p>
+                                                            {/* <small>And some small print.</small> */}
+                                                        </div>
+                                                    </div>
                                                     </a>
                                                     
                                                 </div>
