@@ -215,6 +215,7 @@ const Home = () => {
             ItemService.sendSMS(obj).then((items) => {
                 console.log(">> SMS Sent",items); 
                 callGetStatus();
+                dashboardDetails();
                 toast.current.show({
                     severity: 'info',
                     summary: 'Confirmed',
@@ -430,13 +431,15 @@ const Home = () => {
                                     })
                                 : null}
 
-                                                    
+                                <div className="d-flex justify-content-end pb-1">
+                                    <a href="/report" className=" badge bg-info text-dark"> <i class="bi bi-info-circle me-1"></i> History Report</a>
+                                </div>
                                 {!admin && 
                                     getLast3Status.length? getLast3Status.map((value,index) => {
                                         return (
                                             <div className="col-lg-12" key={index}>
                                                 <div className="list-group">
-                                                    <a href="/#" className="list-group-item list-group-item-action" aria-current="true">
+                                                    <span className="list-group-item list-group-item-action" aria-current="true">
                                                     <div className="d-flex w-200 justify-content-between">
                                                         <h5 className="mb-1 listTitle">{ value ? value.smsBody:''}</h5>
                                                     </div>
@@ -444,7 +447,7 @@ const Home = () => {
                                                     <div className="row">
                                                         <div className="col-sm-1">
                                                             <div className="d-flex justify-content-center">
-                                                                <i className="bi bi-recycle clockfill"></i>
+                                                                <i className="bi bi-patch-check-fill clockfill"></i>
                                                             </div>
                                                         </div>
                                                         <div className="col-sm-11">
@@ -460,7 +463,7 @@ const Home = () => {
                                                             {/* <small>And some small print.</small> */}
                                                         </div>
                                                     </div>
-                                                    </a>
+                                                    </span>
                                                     
                                                 </div>
                                             </div>

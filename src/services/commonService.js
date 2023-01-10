@@ -219,6 +219,13 @@ async function saveSmsinfo(param) {
     return callPOST(api_url,param);
 }
 
+
+//POST get User report
+async function getUserReport(param) {
+    let api_url= config.BASE_URL + 'api/user_report';
+    return callPOST(api_url,param);
+}
+
 // eslint-disable-next-line
 const func = {
     getConfig,
@@ -242,7 +249,8 @@ const func = {
     getUserSMSData,
     sendSMS,
     getSMSDetails,
-    saveSmsinfo
+    saveSmsinfo,
+    getUserReport
 };
 
 export default func;

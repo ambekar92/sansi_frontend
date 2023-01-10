@@ -32,6 +32,17 @@
       "hrefLink": "/add-code",
       "roleInfo":["ADMIN"],
       "children": []
+    },
+    {
+      "id": 4,
+      "name": "Report",
+      "icon": "bi bi-file-text",
+      "icon2": "bi bi-chevron-down ms-auto",
+      "data_bs_targetp": "#Report-nav3",
+      "data_bs_target": "Report-nav3",
+      "hrefLink": "/report",
+      "roleInfo":["USER"],
+      "children": []
     }
     
   ]
